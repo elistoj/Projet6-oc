@@ -15,10 +15,14 @@ function photographerTemplate(data) {
        
         const cityCountryParagraph = document.createElement('p');
         cityCountryParagraph.textContent = ` ${city},  ${country}`;
+        cityCountryParagraph.classList.add('city-country'); // Ajout une class
         const taglineParagraph = document.createElement('p');
-        taglineParagraph.textContent = ` ${tagline}`;
+        taglineParagraph.textContent = ` ${tagline}`;   
+        taglineParagraph.classList.add('tagline'); // Ajout une class
         const priceParagraph = document.createElement('p');
         priceParagraph.textContent = ` $${price}/jour`;
+        priceParagraph.classList.add('price'); // Ajout une class
+
 
         article.appendChild(img);
         article.appendChild(h2);
