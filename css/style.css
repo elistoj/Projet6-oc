@@ -41,11 +41,37 @@ h1 {
 
 .photographer_section article h2 {
     color: #D3573C;
+    /*Ajout text-align, font-style et font-weight*/
+    text-align: center;
     font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
 }
 
 .photographer_section article img {
     height: 200px;
     width: 200px;
     border-radius: 50%; /*Changer la forme de l'image - d'une forme carrée à un cercle*/
+}
+/*Ajout et change le coleur, font-size etc. de city et country, tagline et price */
+.photographer_section article .city-country {
+    color: #901C1C;
+    text-align: center;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+}
+.photographer_section article .tagline{
+    color: #000;
+    text-align: center;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+}
+.photographer_section article .price{
+    color: #757575;
+    text-align: center;
+    font-size: 9px;
+    font-style: normal;
+    font-weight: 400;
 }
