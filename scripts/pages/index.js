@@ -1,6 +1,6 @@
 async function getPhotographers() {
   try {
-      // Fetch data from the JSON file
+// Récupère les données du fichier JSON
       const response = await fetch('data/photographers.json');
 
       if (!response.ok) {
@@ -12,7 +12,7 @@ async function getPhotographers() {
 
       console.log('Fetched data:', data); // Log the fetched data
 
-      // Return the photographers array directly
+// Renvoie directement le tableau des photographes
       return data.photographers;
   } catch (error) {
       console.error('Error fetching photographers:', error);
@@ -23,7 +23,7 @@ async function getPhotographers() {
 async function displayData(data) {
   const photographersSection = document.querySelector(".photographer_section");
 
-  // Access the photographers array from the data object
+// Accédez au tableau des photographes depuis l'objet de données
   const photographers = data.photographers;
 
   photographers.forEach((photographer) => {
@@ -39,7 +39,7 @@ async function init() {
       const photographers = await getPhotographers();
       displayData({ photographers }); // Pass an object with photographers property
   } catch (error) {
-      // Handle the error here, e.g., display an error message to the user
+// Message d'erreur à l'utilisateur
       console.error('Initialization error:', error);
   }
 }
