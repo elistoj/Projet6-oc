@@ -53,7 +53,7 @@ h1 {
     width: 200px;
     border-radius: 50%; /*Changer la forme de l'image - d'une forme carrée à un cercle*/
 }
-/*Ajout et change le coleur, font-size etc. de city et country, tagline et price */
+/*Ajout et change la couleur, la taille de la police, le poids de la police, etc. de la ville et du pays */
 .photographer_section article .city-country {
     color: #901C1C;
     text-align: center;
@@ -61,6 +61,8 @@ h1 {
     font-style: normal;
     font-weight: 400;
 }
+/*Ajout  la taille de la police, le poids de la police, etc. du  slogan  */
+
 .photographer_section article .tagline{
     color: #000;
     text-align: center;
@@ -68,6 +70,8 @@ h1 {
     font-style: normal;
     font-weight: 400;
 }
+/*Ajout et change le couleur, la taille de la police, le poids de la police, etc. du  prix */
+
 .photographer_section article .price{
     color: #757575;
     text-align: center;
