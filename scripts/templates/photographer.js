@@ -6,6 +6,7 @@ function photographerTemplate(data) {
     function getUserCardDOM() {
         const article = document.createElement('article');
         const img = document.createElement('img');
+        const figure = document.createElement('figure');
         img.setAttribute("src", picture);
         img.setAttribute("alt", name); // Ajout d'un attribut alt pour l'accessibilité
         const h2 = document.createElement('h2');
@@ -20,11 +21,11 @@ function photographerTemplate(data) {
         taglineParagraph.textContent = ` ${tagline}`;   
         taglineParagraph.classList.add('tagline'); // Ajout une class
         const priceParagraph = document.createElement('p');
-        priceParagraph.textContent = ` $${price}/jour`;
+        priceParagraph.textContent = ` ${price}€/jour`;
         priceParagraph.classList.add('price'); // Ajout une class
 
-
-        article.appendChild(img);
+        figure.appendChild(img);
+        article.appendChild(figure);
         article.appendChild(h2);
         article.appendChild(cityCountryParagraph);
         article.appendChild(taglineParagraph);
