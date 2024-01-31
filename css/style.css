@@ -35,13 +35,18 @@ h1 {
 }
 
 .photographer_section article {
-    justify-self: center;
+       justify-self: center;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
-
+.photographer_section article figure{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%; /*Changer la forme de l'image - d'une forme carrée à un cercle*/
+    overflow: hidden;
+}
 .photographer_section article h2 {
     color: #D3573C;
     /*Ajout margin, text-align, font-style et font-weight*/
@@ -54,8 +59,9 @@ h1 {
 
 .photographer_section article img {
     height: 200px;
-    width: 200px;
-    border-radius: 50%; /*Changer la forme de l'image - d'une forme carrée à un cercle*/
+    width: 100%;
+    object-fit: cover;
+    opacity: 1;
 }
  /*Ajout margin*/
 .photographer_section article P{
