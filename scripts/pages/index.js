@@ -23,13 +23,20 @@ async function getPhotographers() {
 async function displayData(data) {
   const photographersSection = document.querySelector(".photographer_section");
 
-// Accédez au tableau des photographes depuis l'objet de données
+  // Access the array of photographers from the data object
   const photographers = data.photographers;
 
   photographers.forEach((photographer) => {
-      const photographerModel = photographerTemplate(photographer);
-      const userCardDOM = photographerModel.getUserCardDOM();
-      photographersSection.appendChild(userCardDOM);
+    const photographerModel = photographerTemplate(photographer);
+    const userCardDOM = photographerModel.getUserCardDOM();
+
+    // Dodajte event listener za prelazak na stranicu fotografa
+    userCardDOM.addEventListener('click', () => {
+      // Redirektirajte na stranicu za određenog fotografa
+      window.location.href = `photographer.html?id=${photographer.id}`;
+    });
+
+    photographersSection.appendChild(userCardDOM);
   });
 }
 
