@@ -1,13 +1,146 @@
-#contact_modal {
-    display: none;
+
+:root{
+    /*Ajout modal-duration*/
+    --modal-duration: 0.8s;
+
+}
+#photographerName{
+    font-size: 64px;
+    margin: 0;
 }
 
+.city-country{
+    color: #901C1C;
+    font-family: "DM Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    padding-top: 0;
+}
 .photograph-header {
-    background-color: #FAFAFA;
+    background-color: #fafafa;
     height: 300px;
     margin: 0 100px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: center;
+    padding: 0 50px;
+}
+#photographerInfoContainer{
+    color: #525252;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+}
+#photographerImageContainer img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    
+
+}
+.labelBtn{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+#orderByLabel{
+    margin-left: 100px;
+    display: flex;
+    
+}
+#orderByButton{
+    margin-left: 20px;
+}
+.media-card{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 100px 0 0 100px;
+    width: 26%;
+}
+#photographerMedia{
+    display: flex;
+    flex-wrap: wrap;
+}
+.media-card img, video{
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+ .media-card button img{
+    width: 20px;  
+    height: 20px;  
+    display: flex;
+    align-content: center ;
+    justify-content: center;
+}
+.media-info{
+    display: flex;
+    justify-content: space-between;
+}
+.media-info p{
+    color: #901C1C;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+}
+.likes-container{
+    display: flex;
+    gap: 5px;
 }
 
+.likes-container button{
+    background-color: #fff;
+    border-color: #fff;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-self:center ;
+}
+
+.fa-heart{
+    align-self: center;
+    align-items: center;
+    color: #901C1C;
+    font-size: 24px;
+   
+}
+.fa-heart.liked{
+    color: #901C1C;
+    align-self: center;
+    align-items: center;
+    font-size: 24px;
+      
+}
+.LikesTotalPrice{
+    display: flex;
+    justify-content: center;
+}
+.LikesTotalPrice p{
+    color: #000;
+    text-align: center;
+    font-family: "DM Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+}
+.fixed-container {
+    position: fixed;
+    width: 20%;
+    bottom: 0;
+    right: 36px;
+    background-color: #DB8876;
+    border: 1px solid #dddddd;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /*cela définit l'élément pour qu'il soit plus grand que les autres éléments de la page */
+}
+.fixed-container .fa-heart{
+    color: black;
+    margin-right: 40px;
+}
 .contact_button {
     font-size: 20px;
     font-weight: bold;
@@ -19,19 +152,30 @@
     background-color: #901C1C;
     border-radius: 5px;
     cursor: pointer;
+    /*Ajout*/
+    align-self: center;
+}
+#contact_modal {
+    display: none;
+    background: lightgray;
 }
 
 .modal {
     border-radius: 5px;
     background-color: #DB8876;
-    width: 50%;
+    width: 100%;
+    max-width: 650px;
+    animation-name: modalopen;
+    animation-duration: var(--modal-duration);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     padding: 35px;
-    margin: auto;
+    margin:-130% auto 5% auto;
+    position: relative;
 }
+
 
 .modal header {
     justify-content: space-between;
@@ -40,6 +184,7 @@
 
 .modal header img {
     cursor: pointer;
+    
 }
 
 .modal header h2 {
@@ -73,4 +218,18 @@ form input {
     height: 68px;
     border: none;
     border-radius: 5px;
+}
+/*Ajouter hauteur pour le champ message*/
+#message{
+    height: 170px;
+}
+/*Ajout keyframes*/
+@keyframes modalopen {
+	from {
+		opacity: 0;
+		transform: translateY(-50px);
+	}
+	to {
+		opacity: 1;
+	}
 }
