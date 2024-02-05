@@ -1,7 +1,7 @@
 // Fonction pour ouvrir la fenêtre modale
 function openModalWindow() {
     // Ouvrir une nouvelle fenêtre modale avec le contenu de "contact_modal.html"
-    const modalWindow = window.open("contact_modal.html", "Contactez-moi",photographerName);
+    const modalWindow = window.open("contact_modal.html", "Contactez-moi", photographerName);
     // Mettre le focus sur la nouvelle fenêtre
     modalWindow.focus();
 }
@@ -22,8 +22,29 @@ function displayModal() {
     // Afficher la modal en changeant le style pour "block"
     modal.style.display = "block";
 
-    // Ajouter automatiquement le nom et le prénom du photographe au formulaire
- 
+    
+}
+
+// Code supplémentaire pour récupérer le nom du photographe et le définir dans la fenêtre modale
+function setPhotographerName(name) {
+    const photographerNameElement = document.getElementById("photograpName");
+    if (photographerNameElement) {
+        photographerNameElement.textContent = name;
+    }
+}
+
+// Fonction pour afficher la modal
+function displayModal() {
+    // Sélectionner l'élément modal par son ID
+    const modal = document.getElementById("contact_modal");
+    // Afficher la modal en changeant le style pour "block"
+    modal.style.display = "block";
+
+    // Récupérer le nom du photographe depuis la page et le définir dans la fenêtre modale
+    const photographerName = document.getElementById("photographerName");
+    if (photographerName) {
+        setPhotographerName(photographerName.textContent);
+    }
 }
 
 // Fonction pour fermer la modal
@@ -50,7 +71,6 @@ if (closeModalBtn) {
 // Ajout d'un écouteur d'événement pour le formulaire pour empêcher son envoi par défaut
 document.querySelector('form').addEventListener('submit', function (event) {
     event.preventDefault();
-
 
     // Fermez la modal après avoir traité le formulaire
     closeModal();
