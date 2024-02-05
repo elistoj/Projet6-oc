@@ -1,7 +1,7 @@
 
 :root{
     /*Ajout modal-duration*/
-    --modal-duration: 0.8s;
+    --modal-duration: 0.5s;
 
 }
 #photographerName{
@@ -157,7 +157,8 @@
 }
 #contact_modal {
     display: none;
-    background: lightgray;
+    background: #DB8876;
+    
 }
 
 .modal {
@@ -172,7 +173,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 35px;
-    margin:-130% auto 5% auto;
+    margin:-125% auto 5% auto;
     position: relative;
 }
 
@@ -180,6 +181,7 @@
 .modal header {
     justify-content: space-between;
     width: 100%;
+ 
 }
 
 .modal header img {
@@ -193,6 +195,13 @@
     text-align: center;
 }
 
+#photograpName{
+    display: flex;
+    color: #000;
+    font-size: 64px;
+    font-style: normal;
+    font-weight: 400;
+    margin-top: 10px;}
 form {
     display: flex;
     width: 100%;
