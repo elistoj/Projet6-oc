@@ -60,14 +60,13 @@
     </main>
     
     <!-- Modal pour contacter le photographe -->
-    <div id="contact_modal">
-      <div class="modal">
+    <div id="contact_modal" class="modal">
         <header>
           <h2>Contactez-moi</h2>
-          <p id="photograpName"></p>
           <!-- Bouton pour fermer la modal -->
           <img src="assets/icons/close.svg" onclick="closeModal()" alt="closeIcon" />
         </header>
+        <p id="photograpName"></p>
         <!-- Formulaire pour saisir les coordonnées de contact -->
         <form>
           <div class="formData">
@@ -92,7 +91,7 @@
       </div>
       <!-- Affichage du prix total (pas clair où cela doit apparaître) -->
       <div id="totalPrice"></div>
-    </div>
+    
    
     <!-- Scripts pour manipuler la page -->
     <script src="/scripts/pages/photographer.js"></script>
