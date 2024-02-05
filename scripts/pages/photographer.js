@@ -71,26 +71,7 @@ async function populatePhotographerInfo(photographerId) {
   }
 }
 
-let currentOrderBy = 'date';
 
-function toggleOrderList() {
-  const orderByList = document.getElementById('orderByList');
-  const isHidden = orderByList.hidden;
-
-  orderByList.hidden = !isHidden;
-  document.getElementById('orderByButton').setAttribute('aria-expanded', !isHidden);
-}
-
-function changeOrderBy(newOrderBy) {
-  currentOrderBy = newOrderBy;
-  document.getElementById('orderByButton').textContent = `${capitalizeFirstLetter(newOrderBy)} ▼`;
-  document.getElementById('orderByList').hidden = true;
-  document.getElementById('orderByButton').setAttribute('aria-expanded', 'false');
-}
-
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
 
 // Fonction asynchrone pour peupler les photos du photographe
 async function populatePhotographerPhotos(photographerId) {
@@ -117,9 +98,6 @@ async function populatePhotographerPhotos(photographerId) {
     console.error('Erreur lors du peuplement des photos du photographe :', error);
   }
 }
-
-
-// ...
 
 
 // Fonction pour créer une carte de média
