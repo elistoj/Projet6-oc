@@ -1,37 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
   <head>
+    <!-- Liaison avec le fichier de style CSS -->
     <link href="css/style.css" rel="stylesheet" type="text/css" />
     <meta charset="utf-8">
+    <!-- Liaison avec les icônes Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Configuration de l'icône du site -->
     <link rel="icon" type="image/png" href="assets/favicon.png">
+    <!-- Liaison avec la police de caractères provenant de Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
     <title>Fisheye - photographe </title>
   </head>
   <body>
-    <header>
-      <img src="assets/images/logo.png" class="logo" />
+    <!-- En-tête avec le logo -->
+    <header >
+      <img src="assets/images/logo.png" class="logo" alt="logo" />
     </header>
     <main id="main">
-      <div class="photograph-header">
-        <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
+      <!-- Section avec les informations sur le photographe -->
+      <section class="photograph-header">
+        <div class="nameTagline">
+          <h1 id="photographerName"></h1>
+          <div id="photographerInfoContainer"></div>
+        </div>
+        <!-- Bouton pour contacter le photographe -->
+        <button class="contact_button">Contactez-moi</button>
+        <div id="photographerImageContainer"></div>
+      </section> 
+      <!-- Contrôles pour trier les médias -->
+      <div class="labelBtn" role="group" aria-labelledby="orderByLabel">
+        <span id="orderByLabel">Trier par :</span>
+        <button
+          id="orderByButton"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-controls="orderByList"
+          onclick="toggleOrderList()"
+        >
+          Date <!-- Afficher l'ordre actuel ici -->
+        </button>
+        <!-- Liste pour choisir l'ordre -->
+        <ul id="orderByList" role="listbox" aria-labelledby="orderByLabel" hidden>
+          <li role="option" aria-selected="false" onclick="changeOrderBy('date')">Date</li>
+          <li role="option" aria-selected="false" onclick="changeOrderBy('title')">Titre</li>
+          <li role="option" aria-selected="false" onclick="changeOrderBy('likes')">Popularité</li>
+        </ul>
+      </div>
+    
+      <!-- Conteneur pour afficher les contenus médias -->
+      <div id="photographerMedia">
+      </div>
+    
+      <!-- Conteneur fixe pour afficher le nombre total de likes et le prix -->
+      <div class="fixed-container">
+        <div class="LikesTotalPrice" id="likesTotalPrice"></div>
       </div>
     </main>
+    
+    <!-- Modal pour contacter le photographe -->
     <div id="contact_modal">
-			<div class="modal">
-				<header>
+      <div class="modal">
+        <header>
           <h2>Contactez-moi</h2>
-          <img src="assets/icons/close.svg" onclick="closeModal()" />
+          <p id="photograpName"></p>
+          <!-- Bouton pour fermer la modal -->
+          <img src="assets/icons/close.svg" onclick="closeModal()" alt="closeIcon" />
         </header>
-				<form>
-					<div>
-						<label>Prénom</label>
-						<input />
-					</div>
+        <!-- Formulaire pour saisir les coordonnées de contact -->
+        <form>
+          <div class="formData">
+            <label for="first">Prénom</label><br>
+            <input class="text-control" id="first" name="first" type="text"><br>
+          </div>
+          <div class="formData">
+            <label for="last">Nom</label><br>
+            <input class="text-control" id="last" name="last" type="text"><br>
+          </div>
+          <div class="formData">
+            <label for="email">E-mail</label><br>
+            <input class="text-control" id="email" name="email" type="email"><br>
+          </div>
+          <div class="formData">
+            <label for="message">Votre message</label><br>
+            <input class="text-control" id="message" name="message" type="text"><br>
+          </div>
+          <!-- Bouton pour envoyer le message -->
           <button class="contact_button">Envoyer</button>
-				</form>
-			</div>
-		</div>
+        </form>
+      </div>
+      <!-- Affichage du prix total (pas clair où cela doit apparaître) -->
+      <div id="totalPrice"></div>
+    </div>
+   
+    <!-- Scripts pour manipuler la page -->
     <script src="/scripts/pages/photographer.js"></script>
     <script src="/scripts/utils/contactForm.js"></script>
+    <script src="scripts/templates/photographer.js"></script>
   </body>
 </html>
