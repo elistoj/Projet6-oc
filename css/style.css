@@ -53,10 +53,9 @@ h1 {
 }
 .photographer_section article h2 {
     color: #D3573C;
-    /*Ajout margin, text-align, font-style et font-weight*/
+    /*Ajout margin, text-align et font-weight*/
     text-align: center;
     font-size: 36px;
-    font-style: normal;
     font-weight: 400;
     margin-bottom: 0;
 }
