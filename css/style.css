@@ -46,6 +46,10 @@ h1 {
     height: 200px;
     border-radius: 50%; /*Changer la forme de l'image - d'une forme carrée à un cercle*/
     overflow: hidden;
+    position: relative;
+    
+
+
 }
 .photographer_section article h2 {
     color: #D3573C;
@@ -58,9 +62,10 @@ h1 {
 }
 
 .photographer_section article img {
-    height: 200px;
+    height: 100%;
     width: 100%;
     object-fit: cover;
+    transform: scale(1.4);
 }
  /*Ajout margin*/
 .photographer_section article P{
