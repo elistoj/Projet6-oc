@@ -4,6 +4,7 @@
     --modal-duration: 0.3s;
 
 }
+
 #photographerName{
     font-size: 64px;
     margin: 0;
@@ -85,16 +86,20 @@
 .media-info{
     display: flex;
     justify-content: space-between;
+    gap:2px;
 }
 .media-info p{
     color: #901C1C;
     font-size: 24px;
     font-style: normal;
     font-weight: 400;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 .likes-container{
     display: flex;
-    gap: 5px;
+    gap: 2px;
 }
 
 .likes-container button{
