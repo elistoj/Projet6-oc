@@ -1,6 +1,49 @@
 // Déclarer une variable pour stocker les médias du photographe
 let photographerMedia;
 
+// Classe de la Factory Method pour créer des médias
+class MediaFactory {
+  static createMedia(mediaData, photographerName) {
+    if (mediaData.image) {
+      return new Photo(mediaData, photographerName);
+    } else if (mediaData.video) {
+      return new Video(mediaData, photographerName);
+    } else {
+      throw new Error('Type de média non pris en charge.');
+    }
+  }
+}
+
+// Classe de base pour les médias
+class Media {
+  constructor(mediaData, photographerName) {
+    this.mediaData = mediaData;
+    this.photographerName = photographerName;
+  }
+}
+
+// Classe pour les photos
+class Photo extends Media {
+  render() {
+    const img = document.createElement('img');
+    const imagePath = `assets/images/${this.photographerName}/${this.mediaData.image}`;
+    img.src = imagePath;
+    img.alt = this.mediaData.title;
+    return img;
+  }
+}
+
+// Classe pour les vidéos
+class Video extends Media {
+  render() {
+    const video = document.createElement('video');
+    const videoPath = `assets/images/${this.photographerName}/${this.mediaData.video}`;
+    video.src = videoPath;
+    video.controls = true;
+    return video;
+  }
+}
+
 // Fonction asynchrone pour récupérer les données du photographe
 async function fetchPhotographerData(photographerId) {
   try {
@@ -33,6 +76,42 @@ async function fetchPhotographerData(photographerId) {
     console.error('Erreur lors de la récupération des données du photographe :', error);
     throw error;
   }
+}
+
+// Fonction pour créer une carte de média
+function createMediaCard(media, photographerName, mediaIndex, photographer) {
+  const card = document.createElement('div');
+  card.classList.add('media-card');
+
+  // Utiliser la Factory Method pour créer le média
+  const mediaInstance = MediaFactory.createMedia(media, photographerName);
+  const mediaElement = mediaInstance.render();
+  card.appendChild(mediaElement);
+
+  // Créer l'icône du cœur en tant que fa-regular
+  const heartIcon = document.createElement('i');
+  heartIcon.classList.add('fa-regular', 'fa-heart');
+  heartIcon.addEventListener('click', () => handleLikeClick(mediaIndex, heartIcon, photographer));
+
+  // Ajouter l'icône du cœur à la carte multimédia
+  const likesContainer = document.createElement('div');
+  likesContainer.classList.add('likes-container');
+  const likes = document.createElement('p');
+  likes.textContent = ` ${media.likes}`;
+  likesContainer.appendChild(likes);
+  likesContainer.appendChild(heartIcon);
+
+  const mediaInfo = document.createElement('div');
+  mediaInfo.classList.add('media-info');
+  const title = document.createElement('p');
+  title.textContent = media.title;
+
+  mediaInfo.appendChild(title);
+  mediaInfo.appendChild(likesContainer);
+
+  card.appendChild(mediaInfo);
+
+  return card;
 }
 
 // Fonction asynchrone pour peupler les informations du photographe
@@ -71,8 +150,6 @@ async function populatePhotographerInfo(photographerId) {
   }
 }
 
-
-
 // Fonction asynchrone pour peupler les photos du photographe
 async function populatePhotographerPhotos(photographerId) {
   try {
@@ -99,51 +176,19 @@ async function populatePhotographerPhotos(photographerId) {
   }
 }
 
+// Fonction pour trier par date (ascendant)
+function sortByDate(mediaList) {
+  return mediaList.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+}
 
-// Fonction pour créer une carte de média
-function createMediaCard(media, photographerName, mediaIndex, photographer) {
-  const card = document.createElement('div');
-  card.classList.add('media-card');
+// Fonction pour trier par likes (descendant)
+function sortByLikes(mediaList) {
+  return mediaList.slice().sort((a, b) => b.likes - a.likes);
+}
 
-  // Vérifier s'il s'agit d'une image ou d'une vidéo
-  if (media.image) {
-    const img = document.createElement('img');
-    const imagePath = `assets/images/${photographerName}/${media.image}`;
-    img.src = imagePath;
-    img.alt = media.title;
-    card.appendChild(img);
-  } else if (media.video) {
-    const video = document.createElement('video');
-    const videoPath = `assets/images/${photographerName}/${media.video}`;
-    video.src = videoPath;
-    video.controls = true;
-    card.appendChild(video);
-  }
-
-  // Créer l'icône du cœur en tant que fa-regular
-  const heartIcon = document.createElement('i');
-  heartIcon.classList.add('fa-regular', 'fa-heart');
-  heartIcon.addEventListener('click', () => handleLikeClick(mediaIndex, heartIcon, photographer));
-
-  // Ajouter l'icône du cœur à la carte multimédia
-  const likesContainer = document.createElement('div');
-  likesContainer.classList.add('likes-container');
-  const likes = document.createElement('p');
-  likes.textContent = ` ${media.likes}`;
-  likesContainer.appendChild(likes);
-  likesContainer.appendChild(heartIcon);
-
-  const mediaInfo = document.createElement('div');
-  mediaInfo.classList.add('media-info');
-  const title = document.createElement('p');
-  title.textContent = media.title;
-
-  mediaInfo.appendChild(title);
-  mediaInfo.appendChild(likesContainer);
-
-  card.appendChild(mediaInfo);
-
-  return card;
+// Fonction pour trier par titre (ascendant)
+function sortByTitle(mediaList) {
+  return mediaList.slice().sort((a, b) => a.title.localeCompare(b.title));
 }
 
 // Fonction pour gérer le clic sur l'icône du cœur
@@ -210,18 +255,3 @@ if (!photographerId) {
   populatePhotographerInfo(photographerId);
   populatePhotographerPhotos(photographerId);
 }
-// Fonction pour trier par date (ascendant)
-function sortByDate(mediaList) {
-  return mediaList.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
-}
-
-// Fonction pour trier par likes (descendant)
-function sortByLikes(mediaList) {
-  return mediaList.slice().sort((a, b) => b.likes - a.likes);
-}
-
-// Fonction pour trier par titre (ascendant)
-function sortByTitle(mediaList) {
-  return mediaList.slice().sort((a, b) => a.title.localeCompare(b.title));
-}
-
