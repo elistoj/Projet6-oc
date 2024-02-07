@@ -21,8 +21,7 @@ function displayModal() {
     const modal = document.getElementById("contact_modal");
     // Afficher la modal en changeant le style pour "block"
     modal.style.display = "block";
-
-    
+ 
 }
 
 // Code supplémentaire pour récupérer le nom du photographe et le définir dans la fenêtre modale
@@ -74,4 +73,24 @@ document.querySelector('form').addEventListener('submit', function (event) {
 
     // Fermez la modal après avoir traité le formulaire
     closeModal();
+});
+// Ajout d'un écouteur d'événement pour empêcher son envoi par défaut
+document.querySelector('form').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    // Récupération des données du formulaire dans la modalité
+    const prenom = document.getElementById('first').value;
+    const nom = document.getElementById('last').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+
+    // Affichage des données dans la console
+    console.log('Prénom :', prenom);
+    console.log('Nom :', nom);
+    console.log('Email :', email);
+    console.log('Message :', message);
+
+    // Fermeture de la modalité après traitement du formulaire
+    closeModal();
+
 });
