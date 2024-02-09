@@ -1,7 +1,7 @@
-// Déclarer une variable pour stocker les médias du photographe
+// Déclaration de la variable pour stocker les médias du photographe
 let photographerMedia;
 
-// Classe de la Factory Method pour créer des médias
+// Classe Factory Method pour créer des médias
 class MediaFactory {
   static createMedia(mediaData, photographerName) {
     if (mediaData.image) {
@@ -47,23 +47,23 @@ class Video extends Media {
 // Fonction asynchrone pour récupérer les données du photographe
 async function fetchPhotographerData(photographerId) {
   try {
-    // Effectuer une requête pour récupérer le fichier JSON des photographes
+    // Effectuer une requête pour récupérer le fichier JSON contenant les données des photographes
     const response = await fetch('data/photographers.json');
 
-    // Vérifier si la requête est réussie
+    // Vérifier si la requête a réussi
     if (!response.ok) {
       throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
     }
 
-    // Convertir la réponse en format JSON
+    // Conversion de la réponse en format JSON
     const data = await response.json();
 
-    // Rechercher le photographe en fonction de l'ID
+    // Rechercher le photographe en fonction de son ID
     const photographer = data.photographers.find(p => p.id == photographerId);
 
     // Gérer le cas où le photographe n'est pas trouvé
     if (!photographer) {
-      console.error('Photographe non trouvé pour l\'ID :', photographerId);
+      console.error('Photographe non trouvé pour ID :', photographerId);
       throw new Error('Données du photographe non trouvées.');
     }
 
@@ -79,21 +79,21 @@ async function fetchPhotographerData(photographerId) {
 }
 
 // Fonction pour créer une carte de média
-function createMediaCard(media, photographerName, mediaIndex, photographer) {
+function createMediaCard(media, photographerName, mediaIndex, photographer, mediaList) {
   const card = document.createElement('div');
   card.classList.add('media-card');
 
-  // Utiliser la Factory Method pour créer le média
+  // Utilisation de la Factory Method pour créer le média
   const mediaInstance = MediaFactory.createMedia(media, photographerName);
   const mediaElement = mediaInstance.render();
   card.appendChild(mediaElement);
 
-  // Créer l'icône du cœur en tant que fa-regular
+  // Création de l'icône de cœur en tant qu'icône fa-regular
   const heartIcon = document.createElement('i');
   heartIcon.classList.add('fa-regular', 'fa-heart');
-  heartIcon.addEventListener('click', () => handleLikeClick(mediaIndex, heartIcon, photographer));
+  heartIcon.addEventListener('click', () => handleLikeClick(mediaIndex, heartIcon, photographer, mediaList));
 
-  // Ajouter l'icône du cœur à la carte multimédia
+  // Ajout de l'icône de cœur à la carte de média
   const likesContainer = document.createElement('div');
   likesContainer.classList.add('likes-container');
   const likes = document.createElement('p');
@@ -114,10 +114,10 @@ function createMediaCard(media, photographerName, mediaIndex, photographer) {
   return card;
 }
 
-// Fonction asynchrone pour peupler les informations du photographe
+// Fonction asynchrone pour remplir les informations sur le photographe
 async function populatePhotographerInfo(photographerId) {
   try {
-    // Récupérer le photographe et ses informations
+    // Récupération du photographe et de ses informations
     const { photographer } = await fetchPhotographerData(photographerId);
 
     // Vérifier si le photographe est défini
@@ -125,109 +125,153 @@ async function populatePhotographerInfo(photographerId) {
       throw new Error('Données du photographe non trouvées.');
     }
 
-    // Afficher les informations du photographe
+    // Affichage des informations sur le photographe
     document.getElementById('photographerName').textContent = photographer.name;
 
-    // Ajouter la ville et le pays
+    // Ajout de la ville et du pays
     const cityCountry = document.createElement('p');
     cityCountry.textContent = `${photographer.city}, ${photographer.country}`;
     cityCountry.classList.add('city-country');
     document.getElementById('photographerInfoContainer').appendChild(cityCountry);
 
-    // Ajouter le slogan
+    // Ajout du slogan
     const tagline = document.createElement('p');
     tagline.textContent = photographer.tagline;
     document.getElementById('photographerInfoContainer').appendChild(tagline);
 
-    // Ajouter l'image du photographe
+    // Ajout de la photo du photographe
     const img = document.createElement('img');
     img.src = `assets/photographers/${photographer.portrait}`;
     img.alt = photographer.name;
     document.getElementById('photographerImageContainer').appendChild(img);
 
   } catch (error) {
-    console.error('Erreur lors du peuplement des informations du photographe :', error);
+    console.error('Erreur lors du remplissage des informations sur le photographe :', error);
   }
 }
 
-// Fonction asynchrone pour peupler les photos du photographe
-async function populatePhotographerPhotos(photographerId) {
+// Fonction asynchrone pour remplir les photos du photographe
+async function populatePhotographerPhotos(photographerId, sortBy) {
   try {
-    // Récupérer les médias du photographe
+    // Récupération des médias du photographe
     const { photographerMedia, photographer } = await fetchPhotographerData(photographerId);
-    const mediaContainer = document.getElementById('photographerMedia');
+    let sortedMedia = [];
 
-    // Effacer le conteneur
+    // Tri des médias en fonction de l'option sélectionnée
+    switch (sortBy) {
+      case 'date':
+        sortedMedia = sortByDate(photographerMedia);
+        break;
+      case 'likes':
+        sortedMedia = sortByLikes(photographerMedia);
+        break;
+      case 'title':
+        sortedMedia = sortByTitle(photographerMedia);
+        break;
+      default:
+        // Si aucune option de tri n'est sélectionnée, utilisez la valeur par défaut
+        sortedMedia = sortByDate(photographerMedia);
+    }
+
+    // Mise à jour du tableau photographerMedia
+    photographerMedia.length = 0;
+    sortedMedia.forEach(media => photographerMedia.push(media));
+
+    // Effacement du conteneur
+    const mediaContainer = document.getElementById('photographerMedia');
     mediaContainer.innerHTML = '';
 
-    // Récupérer et afficher les médias du photographe
-    photographerMedia.forEach((media, index) => {
-      const mediaCard = createMediaCard(media, photographer.name, index, photographer);
+    // Récupération et affichage des médias du photographe
+    sortedMedia.forEach((media, index) => {
+      const mediaCard = createMediaCard(media, photographer.name, index, photographer, photographerMedia);
       mediaContainer.appendChild(mediaCard);
     });
 
-    // Ajouter le total des likes
-    const totalLikes = calculateTotalLikes(photographerMedia);
+    // Ajout du nombre total de likes
+    const totalLikes = calculateTotalLikes(sortedMedia);
 
-    // Afficher le total des likes avec l'icône cœur et le prix du photographe
+    // Affichage du nombre total de likes avec l'icône de cœur et le prix du photographe
     displayTotalLikesAndPrice(totalLikes, photographer.price);
   } catch (error) {
-    console.error('Erreur lors du peuplement des photos du photographe :', error);
+    console.error('Erreur lors du remplissage des photos du photographe :', error);
   }
 }
 
-// Fonction pour trier par date (ascendant)
-function sortByDate(mediaList) {
-  return mediaList.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+// Fonction asynchrone qui s'exécute après avoir cliqué sur le bouton de tri
+async function newFunction2() {
+  try {
+    // Récupération des médias du photographe
+    const { photographerMedia, photographer } = await fetchPhotographerData(photographerId);
+
+    // Mise à jour du conteneur pour la fenêtre des options de tri
+    const sortButtonsContainer = document.getElementById('sortButtons');
+
+    // Mise à jour des boutons de tri et ajout au conteneur
+    const sortByDateButton = document.getElementById('sortByDateButton');
+    const sortByTitleButton = document.getElementById('sortByTitleButton');
+    const sortByLikesButton = document.getElementById('sortByLikesButton');
+
+    sortByDateButton.addEventListener('click', () => populatePhotographerPhotos(photographerId, 'date'));
+    sortByTitleButton.addEventListener('click', () => populatePhotographerPhotos(photographerId, 'title'));
+    sortByLikesButton.addEventListener('click', () => populatePhotographerPhotos(photographerId, 'likes'));
+
+  } catch (error) {
+    console.error('Erreur lors du remplissage des photos du photographe :', error);
+  }
 }
 
-// Fonction pour trier par likes (descendant)
-function sortByLikes(mediaList) {
-  return mediaList.slice().sort((a, b) => b.likes - a.likes);
-}
-
-// Fonction pour trier par titre (ascendant)
-function sortByTitle(mediaList) {
-  return mediaList.slice().sort((a, b) => a.title.localeCompare(b.title));
-}
-
-// Fonction pour gérer le clic sur l'icône du cœur
-function handleLikeClick(mediaIndex, heartIcon, photographer) {
-  console.log('Icône de like cliquée !');
-  const media = photographerMedia[mediaIndex];
+// Fonction pour gérer le clic sur l'icône de cœur
+function handleLikeClick(mediaIndex, heartIcon, photographer, mediaList) {
+  console.log('Cœur cliqué !');
+  const media = mediaList.find((media, index) => index === mediaIndex);
   if (!media || typeof media !== 'object' || !media.likes) {
     console.error('Objet média non valide :', media);
     return;
   }
 
-  // Basculer la classe "liked" pour le changement de couleur
+  // Changement de la classe "liked" pour changer la couleur
   heartIcon.classList.toggle('liked');
 
-  // Mettre à jour le nombre de likes pour le média spécifique
+  // Mise à jour du nombre de likes pour le média spécifique
   if (heartIcon.classList.contains('liked')) {
-    // Changer l'icône du cœur en fa-solid et définir la couleur sur rouge
+    // Changement de l'icône de cœur en fa-solid et réglage de la couleur sur rouge
     heartIcon.classList.remove('fa-regular');
     heartIcon.classList.add('fa-solid');
-    heartIcon.style.color = '#901C1C'; // Remplacez par la couleur rouge souhaitée
+    heartIcon.style.color = '#901C1C'; // Changez-le pour la couleur de rouge souhaitée
     media.likes += 1;
   } else {
-    // Remplacer l'icône du cœur par fa-regular
+    // Retour à l'icône de cœur fa-regular
     heartIcon.classList.remove('fa-solid');
     heartIcon.classList.add('fa-regular');
     heartIcon.style.color = '';
     media.likes -= 1;
   }
 
-  // Mettre à jour le nombre de likes pour le média spécifique dans l'interface utilisateur
+  // Mise à jour du nombre de likes pour le média spécifique dans l'interface utilisateur
   const likesContainer = heartIcon.parentElement;
   const likesCount = likesContainer.querySelector('p');
   likesCount.textContent = ` ${media.likes}`;
 
-  // Mettre à jour le nombre total de likes dans photographerMedia
-  const totalLikes = calculateTotalLikes(photographerMedia);
+  // Mise à jour du nombre total de likes
+  const totalLikes = calculateTotalLikes(mediaList);
 
-  // Afficher le nombre total de likes avec l'icône en forme de cœur et le prix du photographe
+  // Affichage du nombre total de likes avec l'icône de cœur et le prix du photographe
   displayTotalLikesAndPrice(totalLikes, photographer.price);
+}
+
+// Fonction pour trier par date (croissante)
+function sortByDate(mediaList) {
+  return mediaList.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+}
+
+// Fonction pour trier par likes (décroissante)
+function sortByLikes(mediaList) {
+  return mediaList.slice().sort((a, b) => b.likes - a.likes);
+}
+
+// Fonction pour trier par titre (croissante)
+function sortByTitle(mediaList) {
+  return mediaList.slice().sort((a, b) => a.title.localeCompare(b.title));
 }
 
 // Fonction pour calculer le nombre total de likes
@@ -238,20 +282,210 @@ function calculateTotalLikes(photographerMedia) {
 // Fonction pour afficher le nombre total de likes et le prix du photographe
 function displayTotalLikesAndPrice(totalLikes, pricePerDay) {
   const likesTotalPriceContainer = document.getElementById('likesTotalPrice');
-  // Afficher le nombre total de likes avec l'icône en forme de cœur noir et le prix du photographe
+  // Affichage du nombre total de likes avec l'icône de cœur et le prix du photographe
   likesTotalPriceContainer.innerHTML = `<p>${totalLikes} <i class="fa-solid fa-heart"></i> ${pricePerDay} € / jour</p>`;
 }
 
-// Récupérer l'ID du photographe depuis les paramètres d'URL
+/// Récupération de l'ID du photographe à partir des paramètres d'URL
 const urlParams = new URLSearchParams(window.location.search);
 const photographerId = urlParams.get('id');
 
-// Vérifier si l'ID du photographe est présent dans les paramètres d'URL
+// Vérification de la présence de l'ID du photographe dans les paramètres d'URL
 if (!photographerId) {
   console.error('ID du photographe non trouvé dans les paramètres d\'URL.');
-  // Gérer le cas où PhotographerId n'est pas présent (par exemple, rediriger ou afficher un message d'erreur)
+  // Traitement lorsque PhotographerId n'est pas présent (par exemple, redirection ou affichage d'un message d'erreur)
 } else {
-  // Appeler les fonctions une seule fois pour peupler les informations du photographe et ses photos
+  // Appel initial des fonctions pour remplir les informations sur le photographe et ses photos
   populatePhotographerInfo(photographerId);
-  populatePhotographerPhotos(photographerId);
+  populatePhotographerPhotos(photographerId, 'date');
+
+  // Ensuite, appelons une nouvelle fonction qui définit les boutons de tri
+  newFunction2();
 }
+
+// Écouteur d'événements pour le bouton "Trier par" qui affiche la fenêtre des options de tri
+document.getElementById('sortButton').addEventListener('click', function() {
+  const sortButtonsContainer = document.getElementById('sortButtons');
+  const currentDisplayStyle = sortButtonsContainer.style.display;
+  // Masquer toutes les fenêtres
+  document.getElementById('sortButtons').querySelectorAll('.sort-options').forEach(option => {
+    option.style.display = 'none';
+  });
+  // Si actuellement affiché, masquez-le, sinon affichez-le
+  sortButtonsContainer.style.display = currentDisplayStyle === 'none' ? 'flex' : 'none';
+});
+
+/// Écouteurs d'événements pour les boutons de tri
+// Lorsque l'option de tri par date est sélectionnée
+document.getElementById('sortByDateButton').addEventListener('click', function() {
+  populatePhotographerPhotos(photographerId, 'date');
+});
+
+// Lorsque l'option de tri par titre est sélectionnée
+document.getElementById('sortByTitleButton').addEventListener('click', function() {
+  populatePhotographerPhotos(photographerId, 'title');
+});
+
+// Lorsque l'option de tri par popularité est sélectionnée
+document.getElementById('sortByLikesButton').addEventListener('click', function() {
+  populatePhotographerPhotos(photographerId, 'likes');
+});
+
+// Fonction pour changer la couleur de fond de la fenêtre des options de tri
+function changeSortOptionsBackground(color) {
+  const sortButtonsContainer = document.getElementById('sortButtons');
+  sortButtonsContainer.style.backgroundColor = color;
+}
+
+// Fonction pour changer la couleur du bouton de tri sélectionné
+function toggleSortOptionsDisplay(buttonId) {
+  const sortOptionsContainer = document.getElementById(buttonId).nextElementSibling;
+  // Masquer toutes les fenêtres
+  document.getElementById('sortButtons').querySelectorAll('.sort-options').forEach(option => {
+    if (option !== sortOptionsContainer) {
+      option.style.display = 'none';
+    }
+  });
+  // Réinitialiser tous les boutons à la couleur par défaut
+  document.querySelectorAll('.sort-button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  // Afficher ou masquer la fenêtre en fonction de l'état actuel d'affichage
+  if (sortOptionsContainer.style.display === 'none') {
+    sortOptionsContainer.style.display = 'flex';
+    document.getElementById(buttonId).classList.add('active'); // Ajouter la classe active
+  } else {
+    sortOptionsContainer.style.display = 'none';
+    document.getElementById(buttonId).classList.remove('active'); // Supprimer la classe active
+  }
+}
+
+// Écouteurs d'événements pour les boutons de tri
+document.getElementById('sortByDateButton').addEventListener('click', function() {
+  populatePhotographerPhotos(photographerId, 'date');
+  toggleSortOptionsBackground(this.id); // Appeler la fonction avec l'ID du bouton cliqué
+});
+
+document.getElementById('sortByTitleButton').addEventListener('click', function() {
+  populatePhotographerPhotos(photographerId, 'title');
+  toggleSortOptionsBackground(this.id); // Appeler la fonction avec l'ID du bouton cliqué
+});
+
+document.getElementById('sortByLikesButton').addEventListener('click', function() {
+  populatePhotographerPhotos(photographerId, 'likes');
+  toggleSortOptionsBackground(this.id); // Appeler la fonction avec l'ID du bouton cliqué
+});
+
+// Fonction pour changer la couleur de fond et ajouter/supprimer la classe active
+// Fonction pour ajouter/supprimer la classe active au bouton de tri sélectionné
+function toggleSortOptionsBackground(buttonId) {
+  const buttons = document.querySelectorAll('#sortButtons button');
+  buttons.forEach(button => {
+    if (button.id === buttonId) {
+      button.classList.add('active'); // Ajouter la classe active au bouton cliqué
+    } else {
+      button.classList.remove('active'); // Supprimer la classe active des autres boutons
+    }
+  });
+}
+
+// Fonction pour ouvrir la lightbox
+function openLightbox(mediaUrl) {
+  const lightbox = document.getElementById('lightbox');
+  const lightboxContent = document.querySelector('.lightbox-content');
+  
+  // Effacer le contenu de la lightbox
+  lightboxContent.innerHTML = '';
+
+  // Ajouter l'image ou la vidéo à la lightbox
+  if (mediaUrl.endsWith('.jpg') || mediaUrl.endsWith('.png') || mediaUrl.endsWith('.jpeg')) {
+    const img = document.createElement('img');
+    img.src = mediaUrl;
+    lightboxContent.appendChild(img);
+  } else if (mediaUrl.endsWith('.mp4')) {
+    const video = document.createElement('video');
+    video.src = mediaUrl;
+    video.controls = true;
+    lightboxContent.appendChild(video);
+  }
+
+  // Afficher la lightbox
+  lightbox.style.display = 'block';
+}
+
+// Fonction pour fermer la lightbox
+function closeLightbox() {
+  const lightbox = document.getElementById('lightbox');
+  lightbox.style.display = 'none';
+}
+
+// Écouteur d'événements pour ouvrir la lightbox lorsqu'on clique sur une image ou une vidéo
+document.getElementById('photographerMedia').addEventListener('click', function(event) {
+  const target = event.target;
+  if (target.tagName === 'IMG' || target.tagName === 'VIDEO') {
+    const mediaUrl = target.tagName === 'IMG' ? target.src : target.src;
+    openLightbox(mediaUrl);
+  }
+});
+
+/// Fonction pour afficher le média précédent dans la lightbox
+function showPreviousMedia(photographer) {
+  const lightboxContent = document.querySelector('.lightbox-content img, .lightbox-content video');
+  if (!lightboxContent) return; // Vérifier s'il y a actuellement un média affiché dans la lightbox
+
+  const currentIndex = photographerMedia.findIndex(media => {
+    const mediaUrl = media.image || media.video;
+    return mediaUrl === lightboxContent.src;
+  });
+
+  if (currentIndex > 0) {
+    const previousMedia = photographerMedia[currentIndex - 1];
+    displayMediaInLightbox(previousMedia, photographer); // Passer la variable photographer
+  }
+}
+
+// Fonction pour afficher le média suivant dans la lightbox
+function showNextMedia(photographer) {
+  const lightboxContent = document.querySelector('.lightbox-content img, .lightbox-content video');
+  if (!lightboxContent) return; // Vérifier s'il y a actuellement un média affiché dans la lightbox
+
+  const currentIndex = photographerMedia.findIndex(media => {
+    const mediaUrl = media.image || media.video;
+    return mediaUrl === lightboxContent.src;
+  });
+
+  if (currentIndex < photographerMedia.length - 1) {
+    const nextMedia = photographerMedia[currentIndex + 1];
+    displayMediaInLightbox(nextMedia, photographer); // Passer la variable photographer
+  }
+}
+
+// Fonction pour afficher le média dans la lightbox
+function displayMediaInLightbox(media, photographerName) {
+  const lightboxContent = document.querySelector('.lightbox-content');
+  lightboxContent.innerHTML = ''; // Nettoyer le contenu de la lightbox
+
+  if (media.image) {
+    const img = document.createElement('img');
+    img.src = `assets/photographers/${photographerName}/${media.image}`;
+    lightboxContent.appendChild(img);
+  } else if (media.video) {
+    const video = document.createElement('video');
+    video.src = `assets/images/${photographerName}/${media.video}`;
+    video.controls = true;
+    lightboxContent.appendChild(video);
+  }
+ 
+}
+
+
+// `newFunction` fonctionne lorsque l'événement click est détecté sur le bouton, il utilise `toggleSortOptionsDisplay` pour afficher/masquer les options de tri.
+// Le fonctionnement de `toggleSortOptionsDisplay` dépend de l'ID du bouton sur lequel l'utilisateur a cliqué. Il recherche les autres options de tri et les masque, puis ajoute ou supprime la classe `active` pour indiquer quel bouton est sélectionné.
+// Enfin, `toggleSortOptionsBackground` modifie la couleur de fond des options de tri en fonction de l'ID du bouton, et met à jour la classe `active` en conséquence.
+// Toutes ces fonctions sont liées aux événements click sur les boutons de tri.
+
+// `handleLikeClick` fonctionne en changeant la classe de l'icône de cœur pour changer sa couleur et son apparence lorsqu'elle est cliquée. Elle met également à jour le nombre de likes pour le média et le nombre total de likes.
+// La fonction `calculateTotalLikes` calcule le nombre total de likes en additionnant les likes de tous les médias.
+// `displayTotalLikesAndPrice` affiche le nombre total de likes avec l'icône de cœur et le prix du photographe. Les valeurs sont insérées dans le DOM pour être affichées à l'utilisateur.
+
+// Toutes ces fonctions sont utilisées conjointement pour gérer l'interface utilisateur de la galerie de médias d'un photographe, permettant aux utilisateurs de trier les médias et de mettre en favori ceux qu'ils aiment.
