@@ -450,8 +450,7 @@ document.getElementById('photographerMedia').addEventListener('click', function(
   }
 });
 
-// U funkciji showNextMedia()
-function showNextMedia() {
+function showNextMedia(photographer) {
   const lightboxContent = document.querySelector('.lightbox-content img, .lightbox-content video');
   if (!lightboxContent) return;
 
@@ -462,11 +461,11 @@ function showNextMedia() {
 
   if (currentIndex < photographerMedia.length - 1) {
     const nextMedia = photographerMedia[currentIndex + 1];
-    displayMediaInLightbox(nextMedia, photographer); // Dodajte promenlivata photographer kako argument
+    displayMediaInLightbox(nextMedia, photographer); 
   }
+
 }
 
-// U funkciji showPreviousMedia()
 function showPreviousMedia() {
   const lightboxContent = document.querySelector('.lightbox-content img, .lightbox-content video');
   if (!lightboxContent) return;
@@ -478,23 +477,24 @@ function showPreviousMedia() {
 
   if (currentIndex > 0) {
     const previousMedia = photographerMedia[currentIndex - 1];
-    displayMediaInLightbox(previousMedia, photographer); // Dodajte promenlivata photographer kako argument
+    displayMediaInLightbox(previousMedia, photographer); 
   }
+  
 }
 
-
 function displayMediaInLightbox(media, photographer) {
+  console.log(photographer); 
   const lightboxContent = document.querySelector('.lightbox-content');
 
   lightboxContent.innerHTML = '';
 
   if (media.image) {
     const img = document.createElement('img');
-    img.src = `assets/images/${photographerName}/${media.image}`;
+    img.src = `assets/images/${photographer.name}/${media.image}`;
     lightboxContent.appendChild(img);
   } else if (media.video) {
     const video = document.createElement('video');
-    video.src = `assets/images/${photographerName}/${media.video}`;
+    video.src = `assets/images/${photographer.name}/${media.video}`;
     video.controls = true;
     lightboxContent.appendChild(video);
   }
