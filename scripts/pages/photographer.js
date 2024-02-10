@@ -1,6 +1,13 @@
 // Déclaration de la variable pour stocker les médias du photographe
 let photographerMedia;
 
+// Deklaracija globalne promenljive za fotografa
+let photographer;
+
+
+
+// Ostatak koda ostaje nepromenjen
+
 // Déclaration de la variable pour stocker l'ID du photographe
 let photographerId;
 
@@ -444,26 +451,10 @@ document.getElementById('photographerMedia').addEventListener('click', function(
   }
 });
 
-function showPreviousMedia(photographer) {
+// U funkciji showNextMedia()
+function showNextMedia() {
   const lightboxContent = document.querySelector('.lightbox-content img, .lightbox-content video');
-  if (!lightboxContent) return; // Vérifier s'il y a actuellement un média affiché dans la lightbox
-
-  const currentIndex = photographerMedia.findIndex(media => {
-    const mediaUrl = media.image || media.video;
-    return mediaUrl === lightboxContent.src;
-  });
-
-  if (currentIndex > 0) {
-    const previousMedia = photographerMedia[currentIndex - 1];
-    displayMediaInLightbox(previousMedia, photographer); // Passer la variable photographer
-  }
-}
-
-
-// Fonction pour afficher le média suivant dans la lightbox
-function showNextMedia(photographer) {
-  const lightboxContent = document.querySelector('.lightbox-content img, .lightbox-content video');
-  if (!lightboxContent) return; // Vérifier s'il y a actuellement un média affiché dans la lightbox
+  if (!lightboxContent) return;
 
   const currentIndex = photographerMedia.findIndex(media => {
     const mediaUrl = media.image || media.video;
@@ -472,56 +463,45 @@ function showNextMedia(photographer) {
 
   if (currentIndex < photographerMedia.length - 1) {
     const nextMedia = photographerMedia[currentIndex + 1];
-    displayMediaInLightbox(nextMedia, photographer); // Passer la variable photographer
+    displayMediaInLightbox(nextMedia, photographer); // Dodajte promenlivata photographer kako argument
   }
 }
 
-// Fonction pour afficher le média dans la lightbox
+// U funkciji showPreviousMedia()
+function showPreviousMedia() {
+  const lightboxContent = document.querySelector('.lightbox-content img, .lightbox-content video');
+  if (!lightboxContent) return;
+
+  const currentIndex = photographerMedia.findIndex(media => {
+    const mediaUrl = media.image || media.video;
+    return mediaUrl === lightboxContent.src;
+  });
+
+  if (currentIndex > 0) {
+    const previousMedia = photographerMedia[currentIndex - 1];
+    displayMediaInLightbox(previousMedia, photographer); // Dodajte promenlivata photographer kako argument
+  }
+}
+
+
 function displayMediaInLightbox(media, photographer) {
   const lightboxContent = document.querySelector('.lightbox-content');
 
-  // Effacer le contenu précédent de la lightbox
   lightboxContent.innerHTML = '';
 
-  // Créer un élément d'image ou de vidéo en fonction du type de média
-  let mediaElement;
   if (media.image) {
-    mediaElement = document.createElement('img');
-    mediaElement.src = `assets/images/${photographerName}/${media.image}`;
-    mediaElement.alt = media.title;
+    const img = document.createElement('img');
+    img.src = `assets/images/${photographerName}/${media.image}`;
+    lightboxContent.appendChild(img);
   } else if (media.video) {
-    mediaElement = document.createElement('video');
-    mediaElement.src = `assets/images/${photographerName}/${media.video}`;
-    mediaElement.controls = true;
+    const video = document.createElement('video');
+    video.src = `assets/images/${photographerName}/${media.video}`;
+    video.controls = true;
+    lightboxContent.appendChild(video);
   }
 
-  // Ajouter le média à la lightbox
-  lightboxContent.appendChild(mediaElement);
-
-  // Créer un élément de titre pour le média
-  const titleParagraph = document.createElement('p');
-  titleParagraph.textContent = media.title;
-
-  // Ajouter le titre à la lightbox
-  lightboxContent.appendChild(titleParagraph);
+  const mediaTitle = document.createElement('p');
+  mediaTitle.textContent = media.title;
+  lightboxContent.appendChild(mediaTitle);
 }
-
-// Écouteurs d'événements pour naviguer entre les médias dans la lightbox
-document.getElementById('lightbox').addEventListener('click', function(event) {
-  if (event.target.classList.contains('fa-chevron-left')) {
-    showPreviousMedia();
-  } else if (event.target.classList.contains('fa-chevron-right')) {
-    showNextMedia();
-  }
-});
-
-document.addEventListener('keydown', function(event) {
-  if (event.key === 'ArrowLeft') {
-    showPreviousMedia();
-  } else if (event.key === 'ArrowRight') {
-    showNextMedia();
-  } else if (event.key === 'Escape') {
-    closeLightbox();
-  }
-});
 
