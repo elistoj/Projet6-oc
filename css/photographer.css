@@ -131,11 +131,15 @@
 
 /* Sélecteur pour l'élément avec l'ID sortButton */
 #sortButton {
-    background-color: #fafafa;
+    background-color: #fff;
     color: #000;
     font-size: 18px;
     font-style: normal;
     font-weight: 700;
+    margin-left: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 /* Sélecteur pour les boutons à l'intérieur de #sortButtons */
