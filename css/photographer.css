@@ -99,12 +99,18 @@
     margin-left: 10%;
     margin-top: -30%;
     position: absolute;
+    background-color: #fff;
 }
 
 .next-media-button {
     margin-left: 80%;
     margin-top: -30%;
     position: absolute;
+    background-color: #fff;
+}
+.fa-solid.fa-angle-right, .fa-angle-left{
+    color: #901C1C;
+   font-size: 46px
 }
 
 /* Sélecteur pour l'élément avec l'ID sortButtons */
