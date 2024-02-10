@@ -467,7 +467,7 @@ function displayMediaInLightbox(media, photographerName) {
 
   if (media.image) {
     const img = document.createElement('img');
-    img.src = `assets/photographers/${photographerName}/${media.image}`;
+    img.src = `assets/images/${photographerName}/${media.image}`;
     lightboxContent.appendChild(img);
   } else if (media.video) {
     const video = document.createElement('video');
