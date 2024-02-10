@@ -1,12 +1,11 @@
 // Déclaration de la variable pour stocker les médias du photographe
 let photographerMedia;
 
-// Deklaracija globalne promenljive za fotografa
 let photographer;
 
 
 
-// Ostatak koda ostaje nepromenjen
+
 
 // Déclaration de la variable pour stocker l'ID du photographe
 let photographerId;
