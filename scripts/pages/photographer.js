@@ -1,6 +1,9 @@
 // Déclaration de la variable pour stocker les médias du photographe
 let photographerMedia;
 
+// Déclaration de la variable pour stocker l'ID du photographe
+let photographerId;
+
 // Classe Factory Method pour créer des médias
 class MediaFactory {
   static createMedia(mediaData, photographerName) {
@@ -19,6 +22,11 @@ class Media {
   constructor(mediaData, photographerName) {
     this.mediaData = mediaData;
     this.photographerName = photographerName;
+  }
+
+  // Méthode render() pour afficher le média
+  render() {
+    throw new Error('La méthode render() doit être implémentée par les sous-classes.');
   }
 }
 
@@ -45,7 +53,7 @@ class Video extends Media {
 }
 
 // Fonction asynchrone pour récupérer les données du photographe
-async function fetchPhotographerData(photographerId) {
+async function fetchPhotographerData(id) {
   try {
     // Effectuer une requête pour récupérer le fichier JSON contenant les données des photographes
     const response = await fetch('data/photographers.json');
@@ -59,16 +67,16 @@ async function fetchPhotographerData(photographerId) {
     const data = await response.json();
 
     // Rechercher le photographe en fonction de son ID
-    const photographer = data.photographers.find(p => p.id == photographerId);
+    const photographer = data.photographers.find(p => p.id == id);
 
     // Gérer le cas où le photographe n'est pas trouvé
     if (!photographer) {
-      console.error('Photographe non trouvé pour ID :', photographerId);
+      console.error('Photographe non trouvé pour ID :', id);
       throw new Error('Données du photographe non trouvées.');
     }
 
     // Filtrer les médias en fonction de l'ID du photographe
-    photographerMedia = data.media.filter(m => m.photographerId == photographerId);
+    photographerMedia = data.media.filter(m => m.photographerId == id);
 
     // Retourner le photographe et ses médias
     return { photographer, photographerMedia };
@@ -115,10 +123,10 @@ function createMediaCard(media, photographerName, mediaIndex, photographer, medi
 }
 
 // Fonction asynchrone pour remplir les informations sur le photographe
-async function populatePhotographerInfo(photographerId) {
+async function populatePhotographerInfo(id) {
   try {
     // Récupération du photographe et de ses informations
-    const { photographer } = await fetchPhotographerData(photographerId);
+    const { photographer } = await fetchPhotographerData(id);
 
     // Vérifier si le photographe est défini
     if (!photographer) {
@@ -151,10 +159,10 @@ async function populatePhotographerInfo(photographerId) {
 }
 
 // Fonction asynchrone pour remplir les photos du photographe
-async function populatePhotographerPhotos(photographerId, sortBy) {
+async function populatePhotographerPhotos(id, sortBy) {
   try {
     // Récupération des médias du photographe
-    const { photographerMedia, photographer } = await fetchPhotographerData(photographerId);
+    const { photographerMedia, photographer } = await fetchPhotographerData(id);
     let sortedMedia = [];
 
     // Tri des médias en fonction de l'option sélectionnée
@@ -198,22 +206,19 @@ async function populatePhotographerPhotos(photographerId, sortBy) {
 }
 
 // Fonction asynchrone qui s'exécute après avoir cliqué sur le bouton de tri
-async function newFunction2() {
+async function initializeSortButtons(id) {
   try {
     // Récupération des médias du photographe
-    const { photographerMedia, photographer } = await fetchPhotographerData(photographerId);
-
-    // Mise à jour du conteneur pour la fenêtre des options de tri
-    const sortButtonsContainer = document.getElementById('sortButtons');
+    const { photographerMedia } = await fetchPhotographerData(id);
 
     // Mise à jour des boutons de tri et ajout au conteneur
     const sortByDateButton = document.getElementById('sortByDateButton');
     const sortByTitleButton = document.getElementById('sortByTitleButton');
     const sortByLikesButton = document.getElementById('sortByLikesButton');
 
-    sortByDateButton.addEventListener('click', () => populatePhotographerPhotos(photographerId, 'date'));
-    sortByTitleButton.addEventListener('click', () => populatePhotographerPhotos(photographerId, 'title'));
-    sortByLikesButton.addEventListener('click', () => populatePhotographerPhotos(photographerId, 'likes'));
+    sortByDateButton.addEventListener('click', () => populatePhotographerPhotos(id, 'date'));
+    sortByTitleButton.addEventListener('click', () => populatePhotographerPhotos(id, 'title'));
+    sortByLikesButton.addEventListener('click', () => populatePhotographerPhotos(id, 'likes'));
 
   } catch (error) {
     console.error('Erreur lors du remplissage des photos du photographe :', error);
@@ -223,7 +228,7 @@ async function newFunction2() {
 // Fonction pour gérer le clic sur l'icône de cœur
 function handleLikeClick(mediaIndex, heartIcon, photographer, mediaList) {
   console.log('Cœur cliqué !');
-  const media = mediaList.find((media, index) => index === mediaIndex);
+  const media = mediaList[mediaIndex];
   if (!media || typeof media !== 'object' || !media.likes) {
     console.error('Objet média non valide :', media);
     return;
@@ -288,7 +293,7 @@ function displayTotalLikesAndPrice(totalLikes, pricePerDay) {
 
 /// Récupération de l'ID du photographe à partir des paramètres d'URL
 const urlParams = new URLSearchParams(window.location.search);
-const photographerId = urlParams.get('id');
+photographerId = urlParams.get('id');
 
 // Vérification de la présence de l'ID du photographe dans les paramètres d'URL
 if (!photographerId) {
@@ -300,7 +305,7 @@ if (!photographerId) {
   populatePhotographerPhotos(photographerId, 'date');
 
   // Ensuite, appelons une nouvelle fonction qui définit les boutons de tri
-  newFunction2();
+  initializeSortButtons(photographerId);
 }
 
 // Écouteur d'événements pour le bouton "Trier par" qui affiche la fenêtre des options de tri
@@ -439,7 +444,6 @@ document.getElementById('photographerMedia').addEventListener('click', function(
   }
 });
 
-/// Fonction pour afficher le média précédent dans la lightbox
 function showPreviousMedia(photographer) {
   const lightboxContent = document.querySelector('.lightbox-content img, .lightbox-content video');
   if (!lightboxContent) return; // Vérifier s'il y a actuellement un média affiché dans la lightbox
@@ -454,6 +458,7 @@ function showPreviousMedia(photographer) {
     displayMediaInLightbox(previousMedia, photographer); // Passer la variable photographer
   }
 }
+
 
 // Fonction pour afficher le média suivant dans la lightbox
 function showNextMedia(photographer) {
@@ -472,64 +477,51 @@ function showNextMedia(photographer) {
 }
 
 // Fonction pour afficher le média dans la lightbox
-function displayMediaInLightbox(media, photographerName) {
+function displayMediaInLightbox(media, photographer) {
   const lightboxContent = document.querySelector('.lightbox-content');
-  lightboxContent.innerHTML = ''; // Effacer le contenu précédent de la lightbox
 
+  // Effacer le contenu précédent de la lightbox
+  lightboxContent.innerHTML = '';
+
+  // Créer un élément d'image ou de vidéo en fonction du type de média
+  let mediaElement;
   if (media.image) {
-    const img = document.createElement('img');
-    img.src = `assets/images/${photographerName}/${media.image}`;
-    lightboxContent.appendChild(img);
-
-    // Accéder aux données JSON pour obtenir le titre
-    fetch('data/photographers.json')
-      .then(response => response.json())
-      .then(data => {
-        const mediaData = data.media.find(item => item.image === media.image);
-        if (mediaData) {
-          const title = document.createElement('p');
-          title.textContent = mediaData.title; // Ajout du titre sous l'image
-          lightboxContent.appendChild(title); // Ajout du titre sous l'image
-        }
-      })
-      .catch(error => {
-        console.error('Erreur lors de la récupération des données JSON :', error);
-      });
+    mediaElement = document.createElement('img');
+    mediaElement.src = `assets/images/${photographerName}/${media.image}`;
+    mediaElement.alt = media.title;
   } else if (media.video) {
-    const video = document.createElement('video');
-    video.src = `assets/images/${photographerName}/${media.video}`;
-    video.controls = true;
-    lightboxContent.appendChild(video);
-
-    // Accéder aux données JSON pour obtenir le titre
-    fetch('data/photographers.json')
-      .then(response => response.json())
-      .then(data => {
-        const mediaData = data.media.find(item => item.video === media.video);
-        if (mediaData) {
-          const title = document.createElement('p');
-          title.textContent = mediaData.title; // Ajout du titre sous la vidéo
-          lightboxContent.appendChild(title); // Ajout du titre sous la vidéo
-        }
-      })
-      .catch(error => {
-        console.error('Erreur lors de la récupération des données JSON :', error);
-      });
+    mediaElement = document.createElement('video');
+    mediaElement.src = `assets/images/${photographerName}/${media.video}`;
+    mediaElement.controls = true;
   }
+
+  // Ajouter le média à la lightbox
+  lightboxContent.appendChild(mediaElement);
+
+  // Créer un élément de titre pour le média
+  const titleParagraph = document.createElement('p');
+  titleParagraph.textContent = media.title;
+
+  // Ajouter le titre à la lightbox
+  lightboxContent.appendChild(titleParagraph);
 }
 
+// Écouteurs d'événements pour naviguer entre les médias dans la lightbox
+document.getElementById('lightbox').addEventListener('click', function(event) {
+  if (event.target.classList.contains('fa-chevron-left')) {
+    showPreviousMedia();
+  } else if (event.target.classList.contains('fa-chevron-right')) {
+    showNextMedia();
+  }
+});
 
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'ArrowLeft') {
+    showPreviousMedia();
+  } else if (event.key === 'ArrowRight') {
+    showNextMedia();
+  } else if (event.key === 'Escape') {
+    closeLightbox();
+  }
+});
 
-
-
-
-// `newFunction` fonctionne lorsque l'événement click est détecté sur le bouton, il utilise `toggleSortOptionsDisplay` pour afficher/masquer les options de tri.
-// Le fonctionnement de `toggleSortOptionsDisplay` dépend de l'ID du bouton sur lequel l'utilisateur a cliqué. Il recherche les autres options de tri et les masque, puis ajoute ou supprime la classe `active` pour indiquer quel bouton est sélectionné.
-// Enfin, `toggleSortOptionsBackground` modifie la couleur de fond des options de tri en fonction de l'ID du bouton, et met à jour la classe `active` en conséquence.
-// Toutes ces fonctions sont liées aux événements click sur les boutons de tri.
-
-// `handleLikeClick` fonctionne en changeant la classe de l'icône de cœur pour changer sa couleur et son apparence lorsqu'elle est cliquée. Elle met également à jour le nombre de likes pour le média et le nombre total de likes.
-// La fonction `calculateTotalLikes` calcule le nombre total de likes en additionnant les likes de tous les médias.
-// `displayTotalLikesAndPrice` affiche le nombre total de likes avec l'icône de cœur et le prix du photographe. Les valeurs sont insérées dans le DOM pour être affichées à l'utilisateur.
-
-// Toutes ces fonctions sont utilisées conjointement pour gérer l'interface utilisateur de la galerie de médias d'un photographe, permettant aux utilisateurs de trier les médias et de mettre en favori ceux qu'ils aiment.
