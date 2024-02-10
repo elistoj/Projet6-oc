@@ -141,7 +141,12 @@
     align-items: center;
     justify-content: flex-start;
 }
-
+.lightbox-content p{
+    color: #901C1C;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+}
 /* Sélecteur pour les boutons à l'intérieur de #sortButtons */
 #sortButtons button {
     width: 170px;
