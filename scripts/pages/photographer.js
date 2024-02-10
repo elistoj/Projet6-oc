@@ -376,7 +376,6 @@ document.getElementById('sortByLikesButton').addEventListener('click', function(
   toggleSortOptionsBackground(this.id); // Appeler la fonction avec l'ID du bouton cliqué
 });
 
-// Fonction pour changer la couleur de fond et ajouter/supprimer la classe active
 // Fonction pour ajouter/supprimer la classe active au bouton de tri sélectionné
 function toggleSortOptionsBackground(buttonId) {
   const buttons = document.querySelectorAll('#sortButtons button');
@@ -389,8 +388,7 @@ function toggleSortOptionsBackground(buttonId) {
   });
 }
 
-// Fonction pour ouvrir la lightbox
-function openLightbox(mediaUrl) {
+function openLightbox(mediaUrl, mediaTitle) {
   const lightbox = document.getElementById('lightbox');
   const lightboxContent = document.querySelector('.lightbox-content');
   
@@ -409,9 +407,22 @@ function openLightbox(mediaUrl) {
     lightboxContent.appendChild(video);
   }
 
+  // Afficher le titre du média dans la lightbox
+  const titleParagraph = document.createElement('p');
+  titleParagraph.textContent = mediaTitle;
+  lightboxContent.appendChild(titleParagraph);
+
   // Afficher la lightbox
   lightbox.style.display = 'block';
 }
+
+
+
+
+
+
+
+
 
 // Fonction pour fermer la lightbox
 function closeLightbox() {
@@ -463,20 +474,53 @@ function showNextMedia(photographer) {
 // Fonction pour afficher le média dans la lightbox
 function displayMediaInLightbox(media, photographerName) {
   const lightboxContent = document.querySelector('.lightbox-content');
-  lightboxContent.innerHTML = ''; // Nettoyer le contenu de la lightbox
+  lightboxContent.innerHTML = ''; // Effacer le contenu précédent de la lightbox
 
   if (media.image) {
     const img = document.createElement('img');
     img.src = `assets/images/${photographerName}/${media.image}`;
     lightboxContent.appendChild(img);
+
+    // Accéder aux données JSON pour obtenir le titre
+    fetch('data/photographers.json')
+      .then(response => response.json())
+      .then(data => {
+        const mediaData = data.media.find(item => item.image === media.image);
+        if (mediaData) {
+          const title = document.createElement('p');
+          title.textContent = mediaData.title; // Ajout du titre sous l'image
+          lightboxContent.appendChild(title); // Ajout du titre sous l'image
+        }
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération des données JSON :', error);
+      });
   } else if (media.video) {
     const video = document.createElement('video');
     video.src = `assets/images/${photographerName}/${media.video}`;
     video.controls = true;
     lightboxContent.appendChild(video);
+
+    // Accéder aux données JSON pour obtenir le titre
+    fetch('data/photographers.json')
+      .then(response => response.json())
+      .then(data => {
+        const mediaData = data.media.find(item => item.video === media.video);
+        if (mediaData) {
+          const title = document.createElement('p');
+          title.textContent = mediaData.title; // Ajout du titre sous la vidéo
+          lightboxContent.appendChild(title); // Ajout du titre sous la vidéo
+        }
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération des données JSON :', error);
+      });
   }
- 
 }
+
+
+
+
 
 
 // `newFunction` fonctionne lorsque l'événement click est détecté sur le bouton, il utilise `toggleSortOptionsDisplay` pour afficher/masquer les options de tri.
