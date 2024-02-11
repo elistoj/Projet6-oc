@@ -2,7 +2,9 @@
     /* Définition de la variable --modal-duration */
     --modal-duration: 0.1s;
 }
-
+body{
+    width: 1440px;
+}
 /* Sélecteur pour l'élément avec l'ID photographerName */
 #photographerName {
     font-size: 64px;
@@ -53,7 +55,7 @@
     height: 100%;
     width: 100%;
     object-fit: cover;
-    transform: scale(1.3);
+    transform: scale(1.2);
     cursor: pointer;
 }
 
@@ -98,28 +100,38 @@
     position: absolute;
     top: 15px;
     right: 35px;
-    font-size: 40px;
+    font-size: 75px;
     cursor: pointer;
+    margin: 1% 20%  auto auto;
 }
 
 .prev-media-button {
-    margin-left: 10%;
+    width: 50px;
+    margin-left: 22%;
     margin-top: -30%;
     position: absolute;
     background-color: #fff;
 }
 
 .next-media-button {
-    margin-left: 80%;
+    width: 50px;
+    margin-left: 75%;
     margin-top: -30%;
     position: absolute;
     background-color: #fff;
 }
 .fa-solid.fa-angle-right, .fa-angle-left{
     color: #901C1C;
-   font-size: 46px
+   font-size: 50px
 }
-
+#mediaTitle {
+    color: #901C1C;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    margin:-40px auto 20px 490px;
+    
+}
 /* Sélecteur pour l'élément avec l'ID sortButtons */
 #sortButtons {
     display: flex;
@@ -141,12 +153,8 @@
     align-items: center;
     justify-content: flex-start;
 }
-.lightbox-content p{
-    color: #901C1C;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 400;
-}
+
+
 /* Sélecteur pour les boutons à l'intérieur de #sortButtons */
 #sortButtons button {
     width: 170px;
@@ -308,10 +316,11 @@ video {
     cursor: pointer;
     align-self: center;
 }
-
+#modalContact{
+    background-color:lightgray;
+}
 #contact_modal {
     display: none;
-    background: #DB8876;
 }
 
 .modal {
@@ -326,7 +335,7 @@ video {
     align-items: center;
     justify-content: space-between;
     padding: 35px;
-    margin: -125% auto 5% auto;
+    margin: -162% auto 5% auto;
     position: relative;
 }
 
