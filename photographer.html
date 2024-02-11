@@ -47,6 +47,7 @@
 </main>
 
 <!-- Modal pour contacter le photographe -->
+<div class="modalContact">
 <div id="contact_modal" class="modal">
   <header>
     <h2>Contactez-moi</h2>
@@ -76,6 +77,7 @@
     <button class="contact_button">Envoyer</button>
   </form>
 </div>
+</div>
 <!-- Affichage du prix total (pas clair où cela doit apparaître) -->
 <div id="totalPrice"></div>
 
@@ -83,21 +85,20 @@
   <span class="close-btn" onclick="closeLightbox()">&times;</span>
   <div class="lightbox-content">
     <!-- Ici seront affichées les images ou vidéos -->
-    <p id="mediaTitle"></p> <!-- Ajout du paragraphe pour afficher le titre -->
   </div>
   <!-- Ajout des boutons pour média précédent et suivant -->
-  <button id="prevMediaButton" class="prev-media-button" onclick="showPreviousMedia(this)">
+  <button id="prevMediaButton" class="prev-media-button">
     <i class="fa-solid fa-angle-left"></i>
-  </button><button id="nextMediaButton" class="next-media-button" onclick="showNextMedia(this)">
+  </button>
+  <button id="nextMediaButton" class="next-media-button">
     <i class="fa-solid fa-angle-right"></i>
   </button>
+  <p id="mediaTitle"></p>
 </div>
-
-
-
 <!-- Scripts pour manipuler la page -->
 <script src="/scripts/pages/photographer.js"></script>
+<script src="/scripts/utils/lightbox.js"></script>
 <script src="/scripts/utils/contactForm.js"></script>
 <script src="/scripts/templates/photographer.js"></script>
-  </body>
+</body>
 </html>
