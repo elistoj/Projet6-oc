@@ -1,11 +1,8 @@
 // Déclaration de la variable pour stocker les médias du photographe
 let photographerMedia;
 
+// Déclaration de la variable pour le photographer
 let photographer;
-
-
-
-
 
 // Déclaration de la variable pour stocker l'ID du photographe
 let photographerId;
@@ -36,27 +33,29 @@ class Media {
   }
 }
 
-// Classe pour les photos
+// Classe de base pour les images
 class Photo extends Media {
   render() {
     const img = document.createElement('img');
     const imagePath = `assets/images/${this.photographerName}/${this.mediaData.image}`;
     img.src = imagePath;
-    img.alt = this.mediaData.title;
+    img.alt = this.mediaData.title; // Définition de l'attribut alt avec le titre de l'image
     return img;
   }
 }
 
-// Classe pour les vidéos
+// Classe de base pour les médias
 class Video extends Media {
   render() {
     const video = document.createElement('video');
     const videoPath = `assets/images/${this.photographerName}/${this.mediaData.video}`;
     video.src = videoPath;
     video.controls = true;
+    video.alt = this.mediaData.title; // Définition de l'attribut alt avec le titre de le video
     return video;
   }
 }
+
 
 // Fonction asynchrone pour récupérer les données du photographe
 async function fetchPhotographerData(id) {
@@ -100,6 +99,7 @@ function createMediaCard(media, photographerName, mediaIndex, photographer, medi
   // Utilisation de la Factory Method pour créer le média
   const mediaInstance = MediaFactory.createMedia(media, photographerName);
   const mediaElement = mediaInstance.render();
+  mediaElement.addEventListener('click', () => openLightbox(media, mediaList, photographerName));
   card.appendChild(mediaElement);
 
   // Création de l'icône de cœur en tant qu'icône fa-regular
@@ -127,6 +127,7 @@ function createMediaCard(media, photographerName, mediaIndex, photographer, medi
 
   return card;
 }
+
 
 // Fonction asynchrone pour remplir les informations sur le photographe
 async function populatePhotographerInfo(id) {
@@ -398,109 +399,3 @@ function toggleSortOptionsBackground(buttonId) {
     }
   });
 }
-
-function openLightbox(mediaUrl, mediaTitle) {
-  const lightbox = document.getElementById('lightbox');
-  const lightboxContent = document.querySelector('.lightbox-content');
-  
-  // Effacer le contenu de la lightbox
-  lightboxContent.innerHTML = '';
-
-  // Ajouter l'image ou la vidéo à la lightbox
-  if (mediaUrl.endsWith('.jpg') || mediaUrl.endsWith('.png') || mediaUrl.endsWith('.jpeg')) {
-    const img = document.createElement('img');
-    img.src = mediaUrl;
-    lightboxContent.appendChild(img);
-  } else if (mediaUrl.endsWith('.mp4')) {
-    const video = document.createElement('video');
-    video.src = mediaUrl;
-    video.controls = true;
-    lightboxContent.appendChild(video);
-  }
-
-  // Afficher le titre du média dans la lightbox
-  const titleParagraph = document.createElement('p');
-  titleParagraph.textContent = mediaTitle;
-  lightboxContent.appendChild(titleParagraph);
-
-  // Afficher la lightbox
-  lightbox.style.display = 'block';
-}
-
-
-
-
-
-
-
-
-
-// Fonction pour fermer la lightbox
-function closeLightbox() {
-  const lightbox = document.getElementById('lightbox');
-  lightbox.style.display = 'none';
-}
-
-// Écouteur d'événements pour ouvrir la lightbox lorsqu'on clique sur une image ou une vidéo
-document.getElementById('photographerMedia').addEventListener('click', function(event) {
-  const target = event.target;
-  if (target.tagName === 'IMG' || target.tagName === 'VIDEO') {
-    const mediaUrl = target.tagName === 'IMG' ? target.src : target.src;
-    openLightbox(mediaUrl);
-  }
-});
-
-function showNextMedia(photographer) {
-  const lightboxContent = document.querySelector('.lightbox-content img, .lightbox-content video');
-  if (!lightboxContent) return;
-
-  const currentIndex = photographerMedia.findIndex(media => {
-    const mediaUrl = media.image || media.video;
-    return mediaUrl === lightboxContent.src;
-  });
-
-  if (currentIndex < photographerMedia.length - 1) {
-    const nextMedia = photographerMedia[currentIndex + 1];
-    displayMediaInLightbox(nextMedia, photographer); 
-  }
-
-}
-
-function showPreviousMedia() {
-  const lightboxContent = document.querySelector('.lightbox-content img, .lightbox-content video');
-  if (!lightboxContent) return;
-
-  const currentIndex = photographerMedia.findIndex(media => {
-    const mediaUrl = media.image || media.video;
-    return mediaUrl === lightboxContent.src;
-  });
-
-  if (currentIndex > 0) {
-    const previousMedia = photographerMedia[currentIndex - 1];
-    displayMediaInLightbox(previousMedia, photographer); 
-  }
-  
-}
-
-function displayMediaInLightbox(media, photographer) {
-  console.log(photographer); 
-  const lightboxContent = document.querySelector('.lightbox-content');
-
-  lightboxContent.innerHTML = '';
-
-  if (media.image) {
-    const img = document.createElement('img');
-    img.src = `assets/images/${photographer.name}/${media.image}`;
-    lightboxContent.appendChild(img);
-  } else if (media.video) {
-    const video = document.createElement('video');
-    video.src = `assets/images/${photographer.name}/${media.video}`;
-    video.controls = true;
-    lightboxContent.appendChild(video);
-  }
-
-  const mediaTitle = document.createElement('p');
-  mediaTitle.textContent = media.title;
-  lightboxContent.appendChild(mediaTitle);
-}
-
