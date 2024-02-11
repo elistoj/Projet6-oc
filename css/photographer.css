@@ -315,6 +315,21 @@ video {
     border-radius: 5px;
     cursor: pointer;
     align-self: center;
+ }
+.modal .contact_button {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    padding: 11px;
+    width: 170px;
+    height: 70px;
+    border: none;
+    background-color: #901C1C;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-start;
+    margin-top: 0;
+    margin-left: 0;
 }
 #modalContact{
     background-color:lightgray;
@@ -326,17 +341,19 @@ video {
 .modal {
     border-radius: 5px;
     background-color: #DB8876;
-    width: 100%;
+    position: absolute;
+    left: 550px;
+    top: 50px;
+    width: 80%;
+    height: 1180px;
     max-width: 650px;
     animation-name: modalopen;
     animation-duration: var(--modal-duration);
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     padding: 35px;
-    margin: -162% auto 5% auto;
-    position: relative;
 }
 
 .modal header {
