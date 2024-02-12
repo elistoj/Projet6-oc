@@ -67,58 +67,72 @@ body{
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
+    height: 1215px;
     overflow: auto;
     background-color: rgb(0, 0, 0);
     background-color: #fff;
 }
-
+.ar{
+    background-color: #fff;
+    height: 90%;
+    left: 50%;
+    margin: 0 auto;
+    position: fixed;
+    text-align: center;
+    top: 3%;
+    transform: translate(-50%, 0);
+    width: 60%;
+}
 .lightbox-content {
-    margin: auto;
-    display: block;
+    background-color: rgba(255, 255, 255, 0);
+    height: 100%;
+    margin: 0 auto 1rem;
+    overflow: hidden;
     width: 80%;
-    max-width: 800px;
 }
 
-.lightbox-content img {
+.lightbox-content img, video {
     width: 100%;
-    height: 900px;
-    object-fit: cover;
+    height: 100%;
     border-radius: 5px;
-    margin: 62px auto 62px auto;
+    object-fit: cover;
 }
-.lightbox-content video {
+.lightbox-content  video {
     width: 100%;
-    height: 900px;
-    object-fit: cover;
+    height: 100%;
     border-radius: 5px;
-    margin: 62px auto 62px auto;
 }
 
 .close-btn {
     color: #901C1C;
     position: absolute;
     top: 15px;
-    right: 35px;
+    right: 75px;
     font-size: 75px;
     cursor: pointer;
-    margin: 1% 20%  auto auto;
+    margin: 1% -3%  auto auto;
 }
 
 .prev-media-button {
     width: 50px;
-    margin-left: 22%;
-    margin-top: -30%;
+    margin-left: -86%;
+    margin-top: -80%;
     position: absolute;
     background-color: #fff;
 }
 
 .next-media-button {
     width: 50px;
-    margin-left: 75%;
-    margin-top: -30%;
+    margin-left: 86%;
+    margin-top: -80%;
     position: absolute;
     background-color: #fff;
+}
+.butt{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 .fa-solid.fa-angle-right, .fa-angle-left{
     color: #901C1C;
@@ -129,8 +143,8 @@ body{
     font-size: 24px;
     font-style: normal;
     font-weight: 400;
-    margin:-40px auto 20px 490px;
-    
+    margin:0 90px;
+    text-align: left;    
 }
 /* Sélecteur pour l'élément avec l'ID sortButtons */
 #sortButtons {
