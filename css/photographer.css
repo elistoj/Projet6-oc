@@ -75,13 +75,11 @@ body{
 .ar{
     background-color: #fff;
     position: fixed;
-    left: 50%;
-    bottom: 5%;
+    bottom: 3%;
     text-align: center;
     top: 3%;
     transform: translate(-50%, 0);
     width: 1050px;
-    height: 95%;
 }
 .lightbox-content {
     background-color: rgba(255, 255, 255, 0);
