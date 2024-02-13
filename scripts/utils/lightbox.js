@@ -77,3 +77,10 @@ function displayMedia(mediaList, index, photographerName) {
   // Affichage du lightbox
   lightbox.style.display = 'block';
 }
+// Селектор за сите медиуми во лајтбоксот
+var mediaElements = document.querySelectorAll('.lightbox-content .media-wrapper img, .lightbox-content .media-wrapper video');
+
+// Проход на секој медиум и поставување на иста максимална ширина
+mediaElements.forEach(function(mediaElement) {
+    mediaElement.style.maxWidth = '100%';
+});
