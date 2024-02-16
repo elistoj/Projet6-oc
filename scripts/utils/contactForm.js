@@ -4,6 +4,10 @@ function openModalWindow() {
     const modalWindow = window.open("contact_modal.html", "Contactez-moi", photographerName);
     // Mettre le focus sur la nouvelle fenêtre
     modalWindow.focus();
+    const modal = document.getElementById('modal');
+    
+    // Postavi tabindex na 0 za modalot
+    modal.setAttribute('tabindex', '0');
 }
 
 // Sélection des boutons de contact
@@ -14,15 +18,6 @@ const firstName = document.getElementById('first');
 const lastName = document.getElementById('last');
 const email = document.getElementById('email');
 const message = document.getElementById('message');
-
-// Fonction pour afficher la modal
-function displayModal() {
-    // Sélectionner l'élément modal par son ID
-    const modal = document.getElementById("contact_modal");
-    // Afficher la modal en changeant le style pour "block"
-    modal.style.display = "block";
- 
-}
 
 // Code supplémentaire pour récupérer le nom du photographe et le définir dans la fenêtre modale
 function setPhotographerName(name) {
@@ -39,12 +34,26 @@ function displayModal() {
     // Afficher la modal en changeant le style pour "block"
     modal.style.display = "block";
 
-    // Récupérer le nom du photographe depuis la page et le définir dans la fenêtre modale
-    const photographerName = document.getElementById("photographerName");
-    if (photographerName) {
-        setPhotographerName(photographerName.textContent);
+    // Postavuvanje na tabindex za site elementi vo modalot na 0
+    const modalElements = modal.querySelectorAll('*');
+    modalElements.forEach(element => {
+        element.setAttribute('tabindex', '0');
+    });
+
+    // Fokusiranje na prvoto input pole vo modalot
+    const firstInput = modal.querySelector('input');
+    if (firstInput) {
+        firstInput.focus();
+    }
+
+    // Fokusiranje na kopceto za zatvaranje
+    const closeModalBtn = modal.querySelector('.modal header img');
+    if (closeModalBtn) {
+        closeModalBtn.focus();
     }
 }
+
+
 
 // Fonction pour fermer la modal
 function closeModal() {
@@ -54,26 +63,23 @@ function closeModal() {
     modal.style.display = "none";
 }
 
-// Ajout d'écouteurs d'événements aux boutons de contact
+// Ajout d'un écouteur d'événements aux boutons de contact
 if (modalBtn) {
     modalBtn.forEach((btn) => btn.addEventListener('click', displayModal));
 }
 
 // Sélection du bouton de fermeture de la modal
 const closeModalBtn = document.querySelector('.modal header img');
-
-// Ajout d'un écouteur d'événement pour fermer la modal lorsque le bouton de fermeture est cliqué
 if (closeModalBtn) {
     closeModalBtn.addEventListener('click', closeModal);
+    // Ajout de la gestion de l'événement clavier pour la fermeture de la modal
+    closeModalBtn.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            closeModal();
+        }
+    });
 }
 
-// Ajout d'un écouteur d'événement pour le formulaire pour empêcher son envoi par défaut
-document.querySelector('form').addEventListener('submit', function (event) {
-    event.preventDefault();
-
-    // Fermez la modal après avoir traité le formulaire
-    closeModal();
-});
 // Ajout d'un écouteur d'événement pour empêcher son envoi par défaut
 document.querySelector('form').addEventListener('submit', function (event) {
     event.preventDefault();
@@ -92,5 +98,11 @@ document.querySelector('form').addEventListener('submit', function (event) {
 
     // Fermeture de la modalité après traitement du formulaire
     closeModal();
+});
 
+// Ajout d'un gestionnaire d'événements pour la touche Escape pour fermer la modalité
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeModal();
+    }
 });
