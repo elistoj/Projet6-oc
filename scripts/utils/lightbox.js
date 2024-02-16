@@ -1,86 +1,137 @@
-// Déclaration de l'index du média actuellement affiché dans le lightbox
-let currentMediaIndex = 0;
+function openCloseFilterMenu() {
+  console.log('Funkcija openCloseFilterMenu se poziva.');
 
-//Function pour ouvrir le lightbox
-function openLightbox(media, mediaList, photographerName) {
-  // Récupérer l'élément lightbox par son ID
-  const lightbox = document.getElementById('lightbox');
-  // Récupérer le contenu du lightbox
-  const lightboxContent = lightbox.querySelector('.lightbox-content');
-  // Récupérer l'élément pour afficher le titre du média dans le lightbox
-  const mediaTitle = lightbox.querySelector('#mediaTitle');
+  const filterMenu = document.querySelector(".dropdown_content");
+  const filterMenuButton = document.querySelector(".btn_drop");
+  const filterButtons = document.querySelectorAll(".dropdown_content li button");
+  const currentFilterSpan = document.getElementById("current_filter");
 
-  // Affichage du titre du média actuel
-  mediaTitle.textContent = media.title;
+  // Postavljamo početni tekst za trenutni filter
+  currentFilterSpan.textContent = "Date";
 
-  // Effacement du contenu précédent du lightbox
-  lightboxContent.innerHTML = '';
+  // Funkcija za otvaranje/zatvaranje menija
+  const toggleFilterMenu = () => {
+      // Proveravamo da li je meni trenutno otvoren ili zatvoren
+      const isExpanded = filterMenuButton.getAttribute("aria-expanded") === "true" || false;
+      // Menjamo atribut za stanje menija
+      filterMenuButton.setAttribute("aria-expanded", !isExpanded);
+      // Dodajemo ili uklanjamo klasu za efekat otvaranja/zatvaranja
+      filterMenu.classList.toggle("curtain_effect");
+      // Rotiramo ikonu strelice na dugmetu za otvaranje/zatvaranje menija
+      document.querySelector(".fa-chevron-up").classList.toggle("rotate");
 
-  // Création de l'image ou de la vidéo dans le lightbox
-  const mediaInstance = MediaFactory.createMedia(media, photographerName);
-  const mediaElement = mediaInstance.render();
-  lightboxContent.appendChild(mediaElement);
+      // Postavljamo novu vrednost atributa aria-hidden
+      const newAriaHiddenValue = filterMenu.classList.contains("curtain_effect") ? "false" : "true";
+      filterMenu.setAttribute("aria-hidden", newAriaHiddenValue);
 
-  // Ajout d'écouteurs d'événements pour les boutons précédent et suivant
-  document.getElementById('prevMediaButton').addEventListener('click', () => showPreviousMedia(mediaList, photographerName));
-  document.getElementById('nextMediaButton').addEventListener('click', () => showNextMedia(mediaList, photographerName));
+      // Postavljamo novu vrednost atributa tabindex za svako dugme filtera
+      const newTabIndexValue = filterMenu.classList.contains("curtain_effect") ? "0" : "-1";
+      filterButtons.forEach(button => button.setAttribute("tabindex", newTabIndexValue));
+  };
 
-  // Affichage du lightbox
-  lightbox.style.display = 'block';
-}
-
-//Function pour fermer le lightbox
-
-function closeLightbox() {
-  // Récupérer l'élément lightbox par son ID
-  const lightbox = document.getElementById('lightbox');
-  // Cacher le lightbox en réglant son style display à 'none'
-  lightbox.style.display = 'none';
-}
-
-// Fonction pour afficher le média suivant dans le lightbox
-function showNextMedia(mediaList, photographerName) {
-  // Calcul de l'index du média suivant
-  currentMediaIndex = (currentMediaIndex + 1) % mediaList.length;
-  // Affichage du média à l'index calculé
-  displayMedia(mediaList, currentMediaIndex, photographerName);
-}
-
-// Fonction pour afficher le média précédent dans le lightbox
-function showPreviousMedia(mediaList, photographerName) {
-  // Calcul de l'index du média précédent
-  currentMediaIndex = (currentMediaIndex - 1 + mediaList.length) % mediaList.length;
-  // Affichage du média à l'index calculé
-  displayMedia(mediaList, currentMediaIndex, photographerName);
-}
-
-// Fonction pour afficher un média spécifique dans le lightbox
-function displayMedia(mediaList, index, photographerName) {
-  // Récupérer le contenu du lightbox
-  const lightboxContent = document.querySelector('.lightbox-content');
-  // Récupérer l'élément pour afficher le titre du média dans le lightbox
-  const mediaTitle = document.querySelector('#mediaTitle');
-  // Récupérer le média à l'index spécifié
-  const media = mediaList[index];
-
-  // Afficher le titre du média
-  mediaTitle.textContent = media.title;
-
-  // Effacement du contenu précédent du lightbox
-  lightboxContent.innerHTML = '';
-
-  // Création de l'image ou de la vidéo dans le lightbox
-  const mediaInstance = MediaFactory.createMedia(media, photographerName);
-  const mediaElement = mediaInstance.render();
-  lightboxContent.appendChild(mediaElement);
-
-  // Affichage du lightbox
-  lightbox.style.display = 'block';
-}
-// Селектор за сите медиуми во лајтбоксот
-var mediaElements = document.querySelectorAll('.lightbox-content .media-wrapper img, .lightbox-content .media-wrapper video');
-
-// Проход на секој медиум и поставување на иста максимална ширина
-mediaElements.forEach(function(mediaElement) {
-    mediaElement.style.maxWidth = '100%';
+  filterMenuButton.addEventListener("click", () => {
+      toggleFilterMenu(); // Poziva se funkcija za otvaranje/zatvaranje menija
+  });
+  // Dodavanje event listenera za pritisak tastera Escape
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        // Provera da li je meni otvoren
+        if (filterMenu.classList.contains("curtain_effect")) {
+            // Ako jeste, zatvori meni
+            toggleFilterMenu();
+        }
+    }
 });
+
+};
+
+
+const displayMediaWithFilter = mediasTemplate => {
+  const currentFilter = document.querySelector('#current_filter');
+  const allFilters = Array.from(document.querySelectorAll('.dropdown_content li button'))
+
+  let filterAlreadySelected = allFilters.find(filter => filter.textContent == currentFilter.textContent);
+  filterAlreadySelected.style.display = 'none';
+
+  allFilters.forEach(filter => {
+      filter.addEventListener('click', () => {
+
+          currentFilter.textContent = filter.textContent;
+          if (filterAlreadySelected) filterAlreadySelected.style.display = 'block';
+
+          filterAlreadySelected = filter;
+          filterAlreadySelected.style.display = 'none';
+
+          populatePhotographerPhotos(filter.textContent);
+      });
+
+      // Dodajemo event listener za pritisak tipke Enter na svakom filteru
+      filter.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter') {
+              currentFilter.textContent = filter.textContent;
+              if (filterAlreadySelected) filterAlreadySelected.style.display = 'block';
+
+              filterAlreadySelected = filter;
+              filterAlreadySelected.style.display = 'none';
+
+              populatePhotographerPhotos(filter.textContent);
+          }
+      });
+  });
+
+
+};
+const filterMenuButtons = document.querySelectorAll('.dropdown_content li button');
+let currentFocusedIndex = 0; // Indeks trenutno fokusiranog dugmeta u meniju
+
+// Funkcija za ažuriranje fokusa na sledeći element u meniju
+function focusNextButton() {
+  currentFocusedIndex = (currentFocusedIndex + 1) % filterMenuButtons.length;
+  filterMenuButtons[currentFocusedIndex].focus();
+}
+
+// Funkcija za ažuriranje fokusa na prethodni element u meniju
+function focusPreviousButton() {
+  currentFocusedIndex = (currentFocusedIndex - 1 + filterMenuButtons.length) % filterMenuButtons.length;
+  filterMenuButtons[currentFocusedIndex].focus();
+}
+
+// Dodavanje event listenera za pritisak tastera strelice na gore ili dole
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'ArrowUp') {
+      event.preventDefault(); // Da sprečimo prelazak na sledeći redak u dokumentu
+      focusPreviousButton();
+  } else if (event.key === 'ArrowDown') {
+      event.preventDefault(); // Da sprečimo prelazak na sledeći redak u dokumentu
+      focusNextButton();
+  }
+});
+// Funkcija za dodavanje event listenera za pritisak tastera Enter na svakom vidljivom filteru
+filterMenuButtons.forEach((filter, index) => {
+  // Provera da li je dugme vidljivo pre dodavanja event listenera
+  if (filter.offsetParent !== null) {
+      filter.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter') {
+              currentFilter.textContent = filter.textContent;
+              if (filterAlreadySelected) filterAlreadySelected.style.display = 'block';
+
+              filterAlreadySelected = filter;
+              filterAlreadySelected.style.display = 'none';
+
+              populatePhotographerPhotos(filter.textContent);
+          } else if (event.key === 'ArrowUp') {
+              event.preventDefault(); // Da sprečimo prelazak na sledeći redak u dokumentu
+              currentFocusedIndex = (index - 1 + filterMenuButtons.length) % filterMenuButtons.length;
+              filterMenuButtons[currentFocusedIndex].focus();
+          } else if (event.key === 'ArrowDown') {
+              event.preventDefault(); // Da sprečimo prelazak na sledeći redak u dokumentu
+              currentFocusedIndex = (index + 1) % filterMenuButtons.length;
+              filterMenuButtons[currentFocusedIndex].focus();
+          }
+      });
+  }
+});
+
+
+openCloseFilterMenu();
+displayMediaWithFilter();
