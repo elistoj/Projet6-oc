@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
+<head>
     <!-- Liaison avec le fichier de style CSS -->
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
     <meta charset="utf-8">
     <!-- Configuration de l'icône du site -->
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <!-- Liaison avec la police de caractères provenant de Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
     <title>Fisheye</title>
-  </head>
-  <body>
-    <!-- En-tête avec le logo et le titre -->
-    <header>
-        <img src="assets/images/logo.png" class="logo" alt="logo de Fisheye"/>
-        <h1>Nos photographes</h1>
-    </header>
-    <!-- Section principale de la page -->
-    <main id="main">
-        <!-- Section pour afficher les photographes -->
-        <div class="photographer_section"></div>
-    </main>
-    <!-- Scripts pour les templates des photographes et la page d'index -->
-    <script src="scripts/templates/photographer.js"></script>
-    <script src="scripts/pages/index.js"></script>
+</head>
+<body>
+<!-- En-tête avec le logo et le titre -->
+<header>
+  <img src="assets/images/logo.png" class="logo" alt="logo de Fisheye" tabindex="0" onclick="window.location.href='/'" onkeydown="if (event.key === 'Enter') window.location.href='/'"/>
+  <h1 tabindex="0" onclick="window.location.href='/'" onkeydown="if (event.key === 'Enter') window.location.href='/'">Nos photographes</h1>
+  
+</header>
+<!-- Section principale de la page -->
+<main id="main">
+    <!-- Section pour afficher les photographes -->
+    <div class="photographer_section" tabindex="0">
+      <!-- Fotografi će biti dinamički generisani ovde -->
+  </div>
+  </main>
+<!-- Scripts pour les templates des photographes et la page d'index -->
+<script src="scripts/templates/photographer.js"></script>
+<script src="scripts/pages/index.js"></script>
   </body>
 </html>
