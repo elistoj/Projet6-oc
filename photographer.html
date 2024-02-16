@@ -29,26 +29,48 @@
     <button class="contact_button">Contactez-moi</button>
     <div id="photographerImageContainer"></div>
   </section>
-  <!-- Contrôles pour trier les médias -->
-  <!--  Boutons pour trier -->
-  <button id="sortButton">Trier par</button>
-  <div id="sortButtons" style="display: none;">
-    <div class="Btns"></div>
-    <button id="sortByDateButton">Date</button>
-    <button id="sortByTitleButton">Titre</button>
-    <button id="sortByLikesButton">Popularite</button>
+    <!-- Contrôles pour trier les médias -->
+      <!-- Boutons pour trier -->
+      <!-- Contrôles pour trier les médias -->
+<!-- Boutons pour trier -->
+<section class="main_content">
+  <div class="main_content_filter">
+      <h2>Trier par</h2>
+      <div class="filter_section">
+          <div class="dropdown">
+              <button class="btn_drop" type="button" role="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="filterOptions" aria-label="Sort by">
+                  <span id="current_filter">Titre</span>
+                  <span class="fa-solid fa-chevron-up" aria-hidden="true"></span>
+              </button>
+
+              <ul id="filterOptions" class="dropdown_content" aria-hidden="true" role="listbox">
+                  <li>
+                      <button id="sortByTitleButton" type="button" tabindex="-1" aria-label="Sort by title">Titre</button>
+                  </li>
+                  <li>
+                      <button id="sortByLikesButton" type="button" tabindex="-1" aria-label="Sort by popularity">Popularité</button>
+                  </li>
+                  <li>
+                      <button id="sortByDateButton" type="button" tabindex="-1" aria-label="Sort by date">Date</button>
+                  </li>
+              </ul>
+          </div>
+      </div>
   </div>
-  <!-- Conteneur pour afficher les contenus médias -->
-  <div id="photographerMedia"></div>
-  <!-- Conteneur fixe pour afficher le nombre total de likes et le prix -->
-  <div class="fixed-container">
-    <div class="LikesTotalPrice" id="likesTotalPrice"></div>
-  </div>
+</section>
+ 
+    <!-- Conteneur pour afficher les contenus médias -->
+    <div id="photographerMedia"></div>
+    <!-- Conteneur fixe pour afficher le nombre total de likes et le prix -->
+    <div class="fixed-container">
+      <div class="LikesTotalPrice" id="likesTotalPrice"></div>
+    </div>
 </main>
 
 <!-- Modal pour contacter le photographe -->
 <div class="modalContact">
 <div id="contact_modal" class="modal">
+  <div class="modaly">
   <header>
     <h2>Contactez-moi</h2>
     <!-- Bouton pour fermer la modal -->
@@ -78,6 +100,7 @@
   </form>
 </div>
 </div>
+</div>
 <!-- Affichage du prix total (pas clair où cela doit apparaître) -->
 <div id="totalPrice"></div>
 
@@ -105,6 +128,7 @@
 <!-- Scripts pour manipuler la page -->
 <script src="/scripts/pages/photographer.js"></script>
 <script src="/scripts/utils/lightbox.js"></script>
+<script src="/scripts/utils/filter.js"></script>
 <script src="/scripts/utils/contactForm.js"></script>
 <script src="/scripts/templates/photographer.js"></script>
 </body>
