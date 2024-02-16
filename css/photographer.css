@@ -1,16 +1,32 @@
 :root {
     /* Définition de la variable --modal-duration */
-    --modal-duration: 0.1s;
+    --modal-duration: 0.1s; 
+    --color-primary: #901C1C;
+    --color-secondary: #DB8876;
+    --color-tertiary: #D3573C;
+    --color-dark: #000;
+    --color-dark-medium: #757575;
+    --color-light: #fff;
+    --color-light-medium: #FAFAFA;
+    --color-label: #312E2E;
+}
+*, ::before, ::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 body{
     width: 1440px;
+    height: 1024px;
 }
 /* Sélecteur pour l'élément avec l'ID photographerName */
 #photographerName {
     font-size: 64px;
     margin: 0;
 }
-
+ul {
+    list-style-type: none;
+}
 /* Sélecteur pour la classe city-country */
 .city-country {
     color: #901C1C;
@@ -93,7 +109,7 @@ body{
 
 .lightbox-content img {
     width: 700px; /* Фиксна ширина */
-    height: 700px; /* Фиксна висина */
+    height: 100%; /* Фиксна висина */
     object-fit: cover; /* Задржување на аспектниот сооднос и центрирање на сликата */
     border-radius: 5px; /* Заокружување на аглите */
     margin: 0 auto; /* Центрирање на сликата во родителскиот елемент */
@@ -153,47 +169,90 @@ body{
     text-align: left;    
 }
 /* Sélecteur pour l'élément avec l'ID sortButtons */
-#sortButtons {
-    display: flex;
-    flex-direction: column-reverse;
-    margin-left: 150px;
-    position: absolute;
-    margin-top: -50px;
-}
-
-/* Sélecteur pour l'élément avec l'ID sortButton */
-#sortButton {
-    background-color: #fff;
-    color: #000;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 700;
-    margin-left: 100px;
+/* MEDIA FILTER */
+.main_content_filter {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    height: 50px;
+    gap: 10px;
 }
 
+.filter_section{
+    position: relative;
+    height: 100%;
+}
 
-/* Sélecteur pour les boutons à l'intérieur de #sortButtons */
-#sortButtons button {
+.dropdown {
+  
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.rotate{
+    transform: rotate(180deg);
+}
+
+.dropdown_content {
+    max-height: 0;
     width: 170px;
-    height: 57px;
-    background-color: #901C1C;
-    border: #fff;
-    text-align: center;
-    padding: 1px;
-    cursor: pointer;
-    margin-top: 2px;
+    transition: max-height .1s ease-in-out;
 }
 
-#sortButtons button:hover {
-    background-color: #DB8876;
-    color: #fff;
+.dropdown_content li {
+    position: relative;
+    width: 150px;
 }
 
-#sortButtons button.active {
-    background-color: #DB8876;
+.dropdown_content li::before{
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    height: 1px;
+    background-color: var(--color-light);
+}
+
+.dropdown_content li button{
+    height: 69px;
+    padding: 15px;
+    color: var(--color-light);
+    margin-top: 0;
+}
+h2{
+    font-weight: 700;
+    font-size: 18px;
+    margin-left:100px;
+    margin-top: 100px;
+
+}
+.btn_drop {
+    font-size: 18px;
+    height: 69px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 170px;
+    background-color: var(--color-primary);
+}
+
+.dropdown_content li button {
+    height: 69px;
+    text-align: left;
+}
+
+.dropdown_content li button:hover,
+.dropdown_content li button:focus,
+.btn_drop:hover,
+.btn_drop:focus{
+    background-color: var(--color-secondary);
+    color: var(--color-black);
+}
+
+.curtain_effect {
+    max-height: 200px;
 }
 
 /* Sélecteur pour tous les boutons */
@@ -224,14 +283,16 @@ button {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    margin: 100px 0 0 100px;
-    width: 26%;
+    width: 30%;
+    justify-content: space-between;
 }
 
 #photographerMedia {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between; 
+    margin: 150px  100px;
+    gap:50px;
 }
 
 
@@ -255,11 +316,12 @@ video {
     display: flex;
     justify-content: space-between;
     gap: 2px;
+    margin-top: 10px;
 }
 
 .media-info p {
     color: #901C1C;
-    font-size: 24px;
+    font-size: clamp(1.1rem, 1.8vw, 1.2rem);
     font-style: normal;
     font-weight: 400;
     white-space: nowrap;
@@ -279,6 +341,7 @@ video {
     height: 25px;
     display: flex;
     align-self: center;
+    cursor: pointer;
 }
 
 .fa-heart {
@@ -286,6 +349,7 @@ video {
     align-items: center;
     color: #901C1C;
     font-size: 24px;
+    cursor: pointer;
 }
 
 .fa-heart.liked {
@@ -312,12 +376,16 @@ video {
 .fixed-container {
     position: fixed;
     width: 20%;
+    height: 62px;
     bottom: 0;
-    right: 36px;
+    right: 3%;
     background-color: #DB8876;
     border: 1px solid #dddddd;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
+    display:flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .fixed-container .fa-heart {
@@ -343,18 +411,25 @@ video {
     margin-left: 0;
     align-self: start;
 }
-#modalContact{
-    background-color:lightgray;
-}
-#contact_modal {
-    display: none;
+.modal .contact_button {
+    margin-top: 0;
+    margin-left: 0;
+    align-self: start;
 }
 
-.modal {
+#contact_modal {
+    display: none;
+    background-color:rgba(196, 196, 196, 0.40);
+    position: relative;
+    z-index: 1000;
+    width: 100%;
+    height: 100vh;
+}
+.modaly{
     border-radius: 5px;
     background-color: #DB8876;
     width: 100%;
-    max-width: 650px;
+    max-width: 680px;
     animation-name: modalopen;
     animation-duration: var(--modal-duration);
     display: flex;
@@ -362,9 +437,13 @@ video {
     align-items: flex-start;
     justify-content: space-between;
     padding: 35px;
-    margin: -162% auto 5% auto;
+    margin: -155% auto 5% auto;
     position: relative;
+    top:10px;
+    bottom: 10px;
+
 }
+
 
 .modal header {
     justify-content: space-between;
@@ -379,6 +458,7 @@ video {
     font-size: 64px;
     font-weight: normal;
     text-align: center;
+    margin: 0;
 }
 
 #photograpName {
@@ -395,6 +475,7 @@ form {
     width: 100%;
     flex-direction: column;
     align-items: flex-start;
+    height: 95%;
 }
 
 form label {
@@ -407,19 +488,18 @@ form div {
     flex-direction: column;
     width: 100%;
     align-items: self-start;
-    margin-bottom: 26px;
 }
 
 form input {
     width: 100%;
-    height: 68px;
+    height: 50px;
     border: none;
     border-radius: 5px;
 }
 
 /* Ajouter une hauteur pour le champ message */
 #message {
-    height: 170px;
+    height: 130px;
 }
 
 /* Ajout des keyframes */
