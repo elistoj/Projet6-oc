@@ -6,7 +6,7 @@ function openModalWindow() {
     modalWindow.focus();
     const modal = document.getElementById('modal');
     
-    // Postavi tabindex na 0 za modalot
+// Définit tabindex à 0 pour modalot
     modal.setAttribute('tabindex', '0');
 }
 
@@ -34,19 +34,19 @@ function displayModal() {
     // Afficher la modal en changeant le style pour "block"
     modal.style.display = "block";
 
-    // Postavuvanje na tabindex za site elementi vo modalot na 0
+// Définit le tabindex pour tous les éléments du modal sur 0
     const modalElements = modal.querySelectorAll('*');
     modalElements.forEach(element => {
         element.setAttribute('tabindex', '0');
     });
 
-    // Fokusiranje na prvoto input pole vo modalot
+// Focus sur le premier champ de saisie du modal
     const firstInput = modal.querySelector('input');
     if (firstInput) {
         firstInput.focus();
     }
 
-    // Fokusiranje na kopceto za zatvaranje
+// Focus sur le bouton de fermeture
     const closeModalBtn = modal.querySelector('.modal header img');
     if (closeModalBtn) {
         closeModalBtn.focus();
