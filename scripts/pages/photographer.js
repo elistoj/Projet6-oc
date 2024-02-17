@@ -34,65 +34,107 @@ class Media {
 }
 
 // Classe de base pour les images
-// Klasa osnovne slike
 class Photo extends Media {
   render() {
     const img = document.createElement('img');
     const imagePath = `assets/images/${this.photographerName}/${this.mediaData.image}`;
     img.src = imagePath;
-    img.alt = this.mediaData.title; // Postavljanje alt atributa sa naslovom slike
-    img.tabIndex = 0; // Dodavanje tabindex atributa
+    img.alt = this.mediaData.title; // Définition de l'attribut alt avec le titre de l'image
     return img;
   }
 }
 
-// Klasa osnovnog videa
+// Classe de base pour les médias
 class Video extends Media {
   render() {
     const video = document.createElement('video');
     const videoPath = `assets/images/${this.photographerName}/${this.mediaData.video}`;
     video.src = videoPath;
-    video.controls = true;
+    video.controls = false;
     video.autoplay = true; // Dodavanje atributa za automatsko reprodukovanje
-    video.alt = this.mediaData.title; // Postavljanje alt atributa sa naslovom videa
-    video.tabIndex = 0; // Dodavanje tabindex atributa
+    video.alt = this.mediaData.title; // Définition de l'attribut alt avec le titre de le video
     return video;
   }
 }
 
-// Funkcija za rukovanje klikom na ikonu srca
-function handleLikeInteraction(event, mediaIndex, heartIcon, photographer, mediaList) {
-  // Funkcija se izvršava samo ako je pritisnuta tipka Enter (keyCode === 13) ili Space (keyCode === 32)
-  if (event.keyCode === 13 || event.keyCode === 32) {
-    // Izvrši istu logiku kao u funkciji handleLikeClick
-    handleLikeClick(mediaIndex, heartIcon, photographer, mediaList);
+
+// Fonction asynchrone pour récupérer les données du photographe
+async function fetchPhotographerData(id) {
+  try {
+    // Effectuer une requête pour récupérer le fichier JSON contenant les données des photographes
+    const response = await fetch('data/photographers.json');
+
+    // Vérifier si la requête a réussi
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
+    }
+
+    // Conversion de la réponse en format JSON
+    const data = await response.json();
+
+    // Rechercher le photographe en fonction de son ID
+    const photographer = data.photographers.find(p => p.id == id);
+
+    // Gérer le cas où le photographe n'est pas trouvé
+    if (!photographer) {
+      console.error('Photographe non trouvé pour ID :', id);
+      throw new Error('Données du photographe non trouvées.');
+    }
+
+    // Filtrer les médias en fonction de l'ID du photographe
+    photographerMedia = data.media.filter(m => m.photographerId == id);
+
+    // Retourner le photographe et ses médias
+    return { photographer, photographerMedia };
+  } catch (error) {
+    console.error('Erreur lors de la récupération des données du photographe :', error);
+    throw error;
   }
 }
 
-// Fonction pour créer une carte de média
 function createMediaCard(media, photographerName, mediaIndex, photographer, mediaList) {
   const card = document.createElement('div');
   card.classList.add('media-card');
 
-  // Utilisation de la Factory Method pour créer le média
+// Créer l'élément média (image ou vidéo)
   const mediaInstance = MediaFactory.createMedia(media, photographerName);
   const mediaElement = mediaInstance.render();
+
+// Ajoutez tabIndex uniquement si l'élément multimédia est une vidéo ou une image
+  if (mediaElement.tagName.toLowerCase() === 'video' || mediaElement.tagName.toLowerCase() === 'img') {
+    mediaElement.tabIndex = 0;
+  }
+
+// Ajoutez un écouteur d'événement pour ouvrir la lightbox en cliquant ou sur Entrée
   mediaElement.addEventListener('click', () => openLightbox(media, mediaList, photographerName));
+  mediaElement.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      openLightbox(media, mediaList, photographerName);
+    }
+    if (event.key === 'Enter') {
+      handleLikeClick(mediaIndex, heartIcon, photographer, mediaList);
+    }
+  });
+
+// Ajoute l'élément multimédia à l'onglet
   card.appendChild(mediaElement);
 
-  // Création de l'icône de cœur en tant qu'icône fa-regular
+// Création de l'icône du cœur comme fa-regular et ajout de tabIndex
   const heartIcon = document.createElement('i');
   heartIcon.classList.add('fa-regular', 'fa-heart');
+  heartIcon.tabIndex = 0;
+
+// Ajout d'un écouteur d'événement Heart Click pour gérer les likes
   heartIcon.addEventListener('click', () => handleLikeClick(mediaIndex, heartIcon, photographer, mediaList));
-  heartIcon.setAttribute('tabindex', 0); // Dodavanje tabindex atributa
 
-  // Dodavanje event listenera za otvaranje lightboxa na pritisak Enter
-  addEnterKeyListenerToMedia(mediaElement, media, mediaList, photographerName);
- 
-  // Dodavanje event listenera za tastaturu (Enter i Space)
-  heartIcon.addEventListener('keydown', (event) => handleLikeInteraction(event, mediaIndex, heartIcon, photographer, mediaList));
+// Ajout d'un écouteur d'événement pour Enter sur le coeur pour gérer les likes
+  heartIcon.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      handleLikeClick(mediaIndex, heartIcon, photographer, mediaList);
+    }
+  });
 
-  // Ajout de l'icône de cœur à la carte de média
+// Ajoute l'icône du cœur à la carte
   const likesContainer = document.createElement('div');
   likesContainer.classList.add('likes-container');
   const likes = document.createElement('p');
@@ -115,151 +157,87 @@ function createMediaCard(media, photographerName, mediaIndex, photographer, medi
 
 
 
-/// Funkcija asinhronog dohvatanja podataka o fotografu
-async function fetchPhotographerData(id) {
+
+// Fonction asynchrone pour remplir les informations sur le photographe
+async function populatePhotographerInfo(id) {
   try {
-    const response = await fetch('data/photographers.json');
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const data = await response.json();
-    const photographer = data.photographers.find(p => p.id == id);
+    // Récupération du photographe et de ses informations
+    const { photographer } = await fetchPhotographerData(id);
+
+    // Vérifier si le photographe est défini
     if (!photographer) {
-      console.error('Photographer not found for ID:', id);
-      throw new Error('Photographer data not found.');
+      throw new Error('Données du photographe non trouvées.');
     }
-    const photographerMedia = data.media.filter(m => m.photographerId == id);
-    return { photographer, photographerMedia };
-  } catch (error) {
-    console.error('Error fetching photographer data:', error);
-    throw error;
-  }
-}
 
-// Funkcija za popunjavanje informacija o fotografu
-async function populatePhotographerInfo(id) {
-  try {
-    const { photographer } = await fetchPhotographerData(id);
+    // Affichage des informations sur le photographe
     document.getElementById('photographerName').textContent = photographer.name;
+
+    // Ajout de la ville et du pays
     const cityCountry = document.createElement('p');
     cityCountry.textContent = `${photographer.city}, ${photographer.country}`;
     cityCountry.classList.add('city-country');
     document.getElementById('photographerInfoContainer').appendChild(cityCountry);
+
+    // Ajout du slogan
     const tagline = document.createElement('p');
     tagline.textContent = photographer.tagline;
     document.getElementById('photographerInfoContainer').appendChild(tagline);
+
+    // Ajout de la photo du photographe
     const img = document.createElement('img');
     img.src = `assets/photographers/${photographer.portrait}`;
     img.alt = photographer.name;
     document.getElementById('photographerImageContainer').appendChild(img);
+
   } catch (error) {
-    console.error('Error populating photographer info:', error);
+    console.error('Erreur lors du remplissage des informations sur le photographe :', error);
   }
 }
 
-// Funkcija za popunjavanje fotografija fotografa
+// Fonction asynchrone pour remplir les photos du photographe
 async function populatePhotographerPhotos(id, sortBy) {
   try {
+    // Récupération des médias du photographe
     const { photographerMedia, photographer } = await fetchPhotographerData(id);
-    let sortedMedia = [...photographerMedia]; // Kopiranje medija za sortiranje
+    let sortedMedia = [];
 
-    // Sortiranje medija na osnovu odabrane opcije
+    // Tri des médias en fonction de l'option sélectionnée
     switch (sortBy) {
       case 'date':
-        sortedMedia.sort((a, b) => new Date(a.date) - new Date(b.date));
+        sortedMedia = sortByDate(photographerMedia);
         break;
       case 'likes':
-        sortedMedia.sort((a, b) => b.likes - a.likes);
+        sortedMedia = sortByLikes(photographerMedia);
         break;
       case 'title':
-        sortedMedia.sort((a, b) => a.title.localeCompare(b.title));
+        sortedMedia = sortByTitle(photographerMedia);
         break;
       default:
-        // Ako nije odabrana opcija, koristi podrazumevanu vrednost (po datumu)
-        sortedMedia.sort((a, b) => new Date(a.date) - new Date(b.date));
+        // Si aucune option de tri n'est sélectionnée, utilisez la valeur par défaut
+        sortedMedia = sortByDate(photographerMedia);
     }
 
-    // Osvežavanje prikaza medija
+    // Mise à jour du tableau photographerMedia
+    photographerMedia.length = 0;
+    sortedMedia.forEach(media => photographerMedia.push(media));
+
+    // Effacement du conteneur
     const mediaContainer = document.getElementById('photographerMedia');
     mediaContainer.innerHTML = '';
+
+    // Récupération et affichage des médias du photographe
     sortedMedia.forEach((media, index) => {
       const mediaCard = createMediaCard(media, photographer.name, index, photographer, photographerMedia);
       mediaContainer.appendChild(mediaCard);
     });
 
-    // Računanje ukupnog broja lajkova
-    const totalLikes = sortedMedia.reduce((total, media) => total + media.likes, 0);
+    // Ajout du nombre total de likes
+    const totalLikes = calculateTotalLikes(sortedMedia);
 
-    // Prikazivanje ukupnog broja lajkova i cene fotografa
+    // Affichage du nombre total de likes avec l'icône de cœur et le prix du photographe
     displayTotalLikesAndPrice(totalLikes, photographer.price);
   } catch (error) {
-    console.error('Error populating photographer photos:', error);
-  }
-}
-
-
-
-
-
-
-// Funkcija za popunjavanje informacija o fotografu
-async function populatePhotographerInfo(id) {
-  try {
-    const { photographer } = await fetchPhotographerData(id);
-    document.getElementById('photographerName').textContent = photographer.name;
-    const cityCountry = document.createElement('p');
-    cityCountry.textContent = `${photographer.city}, ${photographer.country}`;
-    cityCountry.classList.add('city-country');
-    document.getElementById('photographerInfoContainer').appendChild(cityCountry);
-    const tagline = document.createElement('p');
-    tagline.textContent = photographer.tagline;
-    document.getElementById('photographerInfoContainer').appendChild(tagline);
-    const img = document.createElement('img');
-    img.src = `assets/photographers/${photographer.portrait}`;
-    img.alt = photographer.name;
-    document.getElementById('photographerImageContainer').appendChild(img);
-  } catch (error) {
-    console.error('Error populating photographer info:', error);
-  }
-}
-
-// Funkcija za popunjavanje fotografija fotografa
-async function populatePhotographerPhotos(id, sortBy) {
-  try {
-    const { photographerMedia, photographer } = await fetchPhotographerData(id);
-    let sortedMedia = [...photographerMedia]; // Kopiranje medija za sortiranje
-
-    // Sortiranje medija na osnovu odabrane opcije
-    switch (sortBy) {
-      case 'date':
-        sortedMedia.sort((a, b) => new Date(a.date) - new Date(b.date));
-        break;
-      case 'likes':
-        sortedMedia.sort((a, b) => b.likes - a.likes);
-        break;
-      case 'title':
-        sortedMedia.sort((a, b) => a.title.localeCompare(b.title));
-        break;
-      default:
-        // Ako nije odabrana opcija, koristi podrazumevanu vrednost (po datumu)
-        sortedMedia.sort((a, b) => new Date(a.date) - new Date(b.date));
-    }
-
-    // Osvežavanje prikaza medija
-    const mediaContainer = document.getElementById('photographerMedia');
-    mediaContainer.innerHTML = '';
-    sortedMedia.forEach((media, index) => {
-      const mediaCard = createMediaCard(media, photographer.name, index, photographer, photographerMedia);
-      mediaContainer.appendChild(mediaCard);
-    });
-
-    // Računanje ukupnog broja lajkova
-    const totalLikes = sortedMedia.reduce((total, media) => total + media.likes, 0);
-
-    // Prikazivanje ukupnog broja lajkova i cene fotografa
-    displayTotalLikesAndPrice(totalLikes, photographer.price);
-  } catch (error) {
-    console.error('Error populating photographer photos:', error);
+    console.error('Erreur lors du remplissage des photos du photographe :', error);
   }
 }
 
@@ -366,11 +344,4 @@ if (!photographerId) {
   initializeSortButtons(photographerId);
 }
 
-// Funkcija za dodavanje event listenera za otvaranje lightboxa na pritisak Enter
-function addEnterKeyListenerToMedia(mediaElement, media, mediaList, photographerName) {
-  mediaElement.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      openLightbox(media, mediaList, photographerName);
-    }
-  });
-}
+
