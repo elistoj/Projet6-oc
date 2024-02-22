@@ -6,8 +6,7 @@ function openModalWindow() {
     modalWindow.focus();
     const modal = document.getElementById('modal');
     
-// Définit tabindex à 0 pour modalot
-    modal.setAttribute('tabindex', '0');
+
 }
 
 // Sélection des boutons de contact
@@ -45,6 +44,10 @@ function displayModal() {
     if (firstInput) {
         firstInput.focus();
     }
+ // Dobijanje imena fotografa sa početne stranice
+    const photographerName = document.getElementById("photographerName").textContent;
+
+    setPhotographerName(photographerName);
 
 // Focus sur le bouton de fermeture
     const closeModalBtn = modal.querySelector('.modal header img');
@@ -99,6 +102,10 @@ document.querySelector('form').addEventListener('submit', function (event) {
     // Fermeture de la modalité après traitement du formulaire
     closeModal();
 });
+
+// Ajout de slushach en cliquant sur l'icône pour fermer la fenêtre modale
+const closeModalIcon = document.getElementById('closeModalIcon');
+closeModalIcon.addEventListener('click', closeModal);
 
 // Ajout d'un gestionnaire d'événements pour la touche Escape pour fermer la modalité
 document.addEventListener('keydown', function(event) {
