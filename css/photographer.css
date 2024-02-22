@@ -88,7 +88,7 @@ ul {
     background-color: rgba(0, 0, 0, 0.8);
     padding: 0 40%;
 }
-.ar{
+.lightbox-part{
     background-color: #fff;
     position: fixed;
     bottom: 3%;
@@ -108,20 +108,20 @@ ul {
 
 
 .lightbox-content img {
-    width: 700px; /* Фиксна ширина */
-    height: 100%; /* Фиксна висина */
-    object-fit: cover; /* Задржување на аспектниот сооднос и центрирање на сликата */
-    border-radius: 5px; /* Заокружување на аглите */
-    margin: 0 auto; /* Центрирање на сликата во родителскиот елемент */
+    width: 700px; /* Largeur fixe */
+    height: 100%; /* Largeur fixe */
+    object-fit: cover; /* Conserver les proportions et centrer l'image */
+    border-radius: 5px; /* Arrondir les coins */
+    margin: 0 auto; /* Centre l'image dans l'élément parent */
     
 }
 
 
 .lightbox-content video {
-    width: 700px; /* Фиксна ширина */
-    height: 700px; /* Фиксна висина */
+    width: 700px; /* Largeur fixe */
+    height: 100%; /* Largeur fixe */
     border-radius: 5px;
-    margin: 0 auto; /* Центрирање на сликата во родителскиот елемент */
+    margin: 0 auto; /* Centre l'image dans l'élément parent */
 }
 
 
@@ -150,7 +150,7 @@ ul {
     position: absolute;
     background-color: #fff;
 }
-.butt{
+.buttonsLightbox{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -165,7 +165,7 @@ ul {
     font-size: 24px;
     font-style: normal;
     font-weight: 400;
-    margin:-20px 90px;
+    margin: -20px 170px;
     text-align: left;    
 }
 /* Sélecteur pour l'élément avec l'ID sortButtons */
@@ -180,6 +180,7 @@ ul {
 .filter_section{
     position: relative;
     height: 100%;
+    z-index: 1000;
 }
 
 .dropdown {
@@ -241,6 +242,7 @@ h2{
 .dropdown_content li button {
     height: 69px;
     text-align: left;
+    z-index: 1000;
 }
 
 .dropdown_content li button:hover,
@@ -469,7 +471,11 @@ video {
     font-weight: 400;
     margin-top: 10px;
 }
-
+#closeModalIcon{
+    width: 50px;
+    background-color: #DB8876;
+    border: #DB8876;
+}
 form {
     display: flex;
     width: 100%;
