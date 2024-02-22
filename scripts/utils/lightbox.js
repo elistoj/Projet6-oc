@@ -10,10 +10,10 @@ function openLightbox(media, mediaList, photographerName) {
   // Retrieve the element to display the media title in the lightbox
   const mediaTitle = lightbox.querySelector('#mediaTitle');
 
-  // Display the title of the current media
+// Afficher le titre du média actuel
   mediaTitle.textContent = media.title;
 
-  // Clear previous content of the lightbox
+// Efface le contenu précédent de la lightbox
   lightboxContent.innerHTML = '';
 
   // Create the image or video in the lightbox
@@ -21,95 +21,119 @@ function openLightbox(media, mediaList, photographerName) {
   const mediaElement = mediaInstance.render();
   lightboxContent.appendChild(mediaElement);
 
-  // Display the lightbox
-  lightbox.style.display = 'block';
+     // Définit tabindex sur 0 pour rendre la media focusable
+     mediaElement.tabIndex = 0;
 
-  // Add event listener for Enter key press to close lightbox
+// Afficher la lightbox
+  lightbox.style.display = 'block';
+// Vérifiez si le média est une vidéo et créez un élément vidéo
+if (media.video) {
+// Récupère l'élément vidéo existant
+  const videoElement = lightboxContent.querySelector('video');
+// Vérifiez si un élément vidéo est trouvé
+  if (videoElement) {
+// Définition des attributs de lecture automatique et de contrôle  
+    videoElement.autoplay = true;
+    videoElement.controls = true;
+    // Définit tabindex sur 0 pour rendre la vidéo focusable
+    videoElement.tabIndex = 0;
+  }
+}
+  
+// Ajouter un écouteur d'événement pour appuyer sur la touche Entrée pour fermer la lightbox
   document.addEventListener('keydown', handleKeyboardNavigation);
 
-  // Set tabindex for close button
+// Définit le tabindex pour le bouton de fermeture
   const closeButton = document.querySelector('.close-btn');
   closeButton.setAttribute('tabindex', '0');
   closeButton.focus();
 
-  // Add event listener for closing lightbox with Enter key
+// Ajout d'un écouteur d'événements pour fermer la lightbox avec la touche Entrée
   closeButton.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
       closeLightbox();
     }
   });
 
-  // Add event listeners for previous and next buttons
+// Ajout d'écouteurs d'événements pour les boutons précédent et suivant
   const prevMediaButton = document.getElementById('prevMediaButton');
   const nextMediaButton = document.getElementById('nextMediaButton');
   prevMediaButton.addEventListener('click', () => showPreviousMedia(mediaList, photographerName));
   nextMediaButton.addEventListener('click', () => showNextMedia(mediaList, photographerName));
 
-  // Add tabindex for previous and next media buttons
+// Ajout d'un tabindex pour les boutons multimédias précédents et suivants
   prevMediaButton.setAttribute('tabindex', '0');
   nextMediaButton.setAttribute('tabindex', '0');
 }
 
-// Function to close the lightbox
+// Fonction pour fermer la lightbox
 function closeLightbox() {
-  // Retrieve the lightbox element by its ID
+// Récupère l'élément lightbox par son ID
   const lightbox = document.getElementById('lightbox');
-  // Hide the lightbox by setting its display style to 'none'
+// Masquer la lightbox en définissant son style d'affichage sur 'aucun'
   lightbox.style.display = 'none';
 
-  // Remove event listener for keyboard navigation
+// Supprime l'écouteur d'événements pour la navigation au clavier
   document.removeEventListener('keydown', handleKeyboardNavigation);
 }
 
-// Function to handle keyboard navigation
+// Fonction pour gérer la navigation au clavier
 function handleKeyboardNavigation(event) {
   if (event.key === 'Escape') {
     closeLightbox();
   }
 }
 
-// Add event listener for Escape key press to close lightbox
+// Ajout d'un écouteur d'événement pour la touche Échap, appuyez pour fermer la lightbox
 document.addEventListener('keydown', handleKeyboardNavigation);
 
-// Add event listener for closing lightbox with close button
+// Ajout d'un écouteur d'événements pour fermer la lightbox avec le bouton de fermeture
 document.querySelector('.close-btn').addEventListener('click', closeLightbox);
 
-// Function to show the previous media in the lightbox
+// Fonction pour afficher le média précédent dans la lightbox
 function showPreviousMedia(mediaList, photographerName) {
-  // Calculate the index of the previous media
+// Calcule l'index du média précédent
   currentMediaIndex = (currentMediaIndex - 1 + mediaList.length) % mediaList.length;
-  // Display the media with the calculated index
+// Afficher le média avec l'index calculé
   displayMedia(mediaList, currentMediaIndex, photographerName);
 }
 
-// Function to show the next media in the lightbox
+// Fonction pour afficher le média suivant dans la lightbox
 function showNextMedia(mediaList, photographerName) {
-  // Calculate the index of the next media
+// Calcule l'index du prochain média
   currentMediaIndex = (currentMediaIndex + 1) % mediaList.length;
-  // Display the media with the calculated index
+// Afficher le média avec l'index calculé
   displayMedia(mediaList, currentMediaIndex, photographerName);
 }
 
-// Function to display a specific media in the lightbox
+// Fonction pour afficher un média spécifique dans la lightbox
 function displayMedia(mediaList, index, photographerName) {
-  // Retrieve the content of the lightbox
+// Récupère le contenu de la lightbox
   const lightboxContent = document.querySelector('.lightbox-content');
   // Retrieve the element to display the title of the media in the lightbox
   const mediaTitle = document.querySelector('#mediaTitle');
-  // Retrieve the media at the specified index
+// Récupère l'élément pour afficher le titre du média dans la lightbox
   const media = mediaList[index];
 
-  // Display the title of the media
+// Afficher le titre du média
   mediaTitle.textContent = media.title;
 
-  // Clear previous content of the lightbox
+// Efface le contenu précédent de la lightbox
   lightboxContent.innerHTML = '';
 
-  // Create the image or video in the lightbox
+// Crée l'image ou la vidéo dans la lightbox
   const mediaInstance = MediaFactory.createMedia(media, photographerName);
   const mediaElement = mediaInstance.render();
   lightboxContent.appendChild(mediaElement);
 
-  // Display the lightbox
+  // Afficher la lightbox
   lightbox.style.display = 'block';
+
+// Si le média est une vidéo, démarre la lecture automatiquement
+  if (media.video) {
+    mediaElement.autoplay = true;
+    mediaElement.controls = true;
+     // Définit tabindex sur 0 pour rendre la vidéo focusable
+     mediaElement.tabIndex = 0;
+  }
 }
