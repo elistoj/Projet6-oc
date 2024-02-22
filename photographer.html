@@ -16,42 +16,40 @@
 <body>
 <!-- En-tête avec le logo -->
 <header >
-  <img src="assets/images/logo.png" class="logo" alt="logo" />
+  <img src="assets/images/logo.png" class="logo" id="logo" alt="logo" tabIndex="0"> <!-- tabindex="0" for screen reader accessibility -->
 </header>
 <main id="main">
   <!-- Section avec les informations sur le photographe -->
   <section class="photograph-header">
     <div class="nameTagline">
-      <h1 id="photographerName"></h1>
+      <h1 id="photographerName" tabindex="0"></h1>
       <div id="photographerInfoContainer"></div>
     </div>
     <!-- Bouton pour contacter le photographe -->
-    <button class="contact_button">Contactez-moi</button>
-    <div id="photographerImageContainer"></div>
+    <button class="contact_button" aria-label="Contactez-moi" tabIndex="0">Contactez-moi</button> <!-- tabindex="0" for screen reader accessibility -->
+    <span id="photographerImageContainer" tabIndex="0"></span>
   </section>
     <!-- Contrôles pour trier les médias -->
-      <!-- Boutons pour trier -->
-      <!-- Contrôles pour trier les médias -->
 <!-- Boutons pour trier -->
 <section class="main_content">
   <div class="main_content_filter">
-      <h2>Trier par</h2>
+      <h2 tabIndex="0">Trier par</h2>
       <div class="filter_section">
           <div class="dropdown">
-              <button class="btn_drop" type="button" role="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="filterOptions" aria-label="Sort by">
+              <button class="btn_drop" type="button" role="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="filterOptions" aria-label="Sort by" tabIndex="0"> <!-- tabindex="0" for screen reader accessibility -->
                   <span id="current_filter">Titre</span>
                   <span class="fa-solid fa-chevron-up" aria-hidden="true"></span>
               </button>
 
               <ul id="filterOptions" class="dropdown_content" aria-hidden="true" role="listbox">
                   <li>
-                      <button id="sortByTitleButton" type="button" tabindex="-1" aria-label="Sort by title">Titre</button>
+                      <button id="sortByTitleButton" type="button" tabindex="-1" aria-label="Sort by title" tabIndex="0">Titre</button> <!-- tabindex="0" for screen reader accessibility -->
                   </li>
                   <li>
-                      <button id="sortByLikesButton" type="button" tabindex="-1" aria-label="Sort by popularity">Popularité</button>
+                      <button id="sortByLikesButton" type="button" tabindex="-1" aria-label="Sort by popularity" tabIndex="0">Popularité</button> <!-- tabindex="0" for screen reader accessibility -->
                   </li>
                   <li>
-                      <button id="sortByDateButton" type="button" tabindex="-1" aria-label="Sort by date">Date</button>
+                      <button id="sortByDateButton" type="button" tabindex="-1" aria-label="Sort by date" tabIndex="0">Date</button> <!-- tabindex="0" for screen reader accessibility -->
                   </li>
               </ul>
           </div>
@@ -60,69 +58,77 @@
 </section>
  
     <!-- Conteneur pour afficher les contenus médias -->
-    <div id="photographerMedia"></div>
+    <article id="photographerMedia">
+      <span id="photoMedia" tabindex="0"></span>
+      <span id="photoTitle" class="title" tabindex="0"></span>
+      <p id="Likes" class= "likes" tabindex="0"></p>
+      <span id="heart" tabindex="0"></span>
+    </article>
     <!-- Conteneur fixe pour afficher le nombre total de likes et le prix -->
     <div class="fixed-container">
-      <div class="LikesTotalPrice" id="likesTotalPrice"></div>
+      <div class="LikesTotalPrice" id="likesTotalPrice" tabindex="0"></div>
     </div>
 </main>
 
 <!-- Modal pour contacter le photographe -->
-<div class="modalContact">
+<section class="modalContact">
 <div id="contact_modal" class="modal">
   <div class="modaly">
   <header>
     <h2>Contactez-moi</h2>
     <!-- Bouton pour fermer la modal -->
-    <img src="assets/icons/close.svg" onclick="closeModal()" alt="closeIcon" />
+    <button id="closeModalIcon" aria-label="Fermer la modal" tabIndex="0"> <!-- tabindex="0" for screen reader accessibility -->
+      <img src="assets/icons/close.svg" alt="closeIcon" />
+    </button>
   </header>
   <p id="photograpName"></p>
   <!-- Formulaire pour saisir les coordonnées de contact -->
   <form>
     <div class="formData">
       <label for="first">Prénom</label><br>
-      <input class="text-control" id="first" name="first" type="text"><br>
+      <input class="text-control" id="first" name="first" type="text" tabIndex="0"><br> <!-- tabindex="0" for screen reader accessibility -->
     </div>
     <div class="formData">
       <label for="last">Nom</label><br>
-      <input class="text-control" id="last" name="last" type="text"><br>
+      <input class="text-control" id="last" name="last" type="text" tabIndex="0"><br> <!-- tabindex="0" for screen reader accessibility -->
     </div>
     <div class="formData">
       <label for="email">E-mail</label><br>
-      <input class="text-control" id="email" name="email" type="email"><br>
+      <input class="text-control" id="email" name="email" type="email" tabIndex="0"><br> <!-- tabindex="0" for screen reader accessibility -->
     </div>
     <div class="formData">
       <label for="message">Votre message</label><br>
-      <input class="text-control" id="message" name="message" type="text"><br>
+      <input class="text-control" id="message" name="message" type="text" tabIndex="0"><br> <!-- tabindex="0" for screen reader accessibility -->
     </div>
     <!-- Bouton pour envoyer le message -->
-    <button class="contact_button">Envoyer</button>
+    <button class="contact_button" tabIndex="0">Envoyer</button> <!-- tabindex="0" for screen reader accessibility -->
   </form>
 </div>
 </div>
-</div>
+</section>
 <!-- Affichage du prix total (pas clair où cela doit apparaître) -->
-<div id="totalPrice"></div>
+<div id="totalPrice" tabindex="0"></div>
 
 <div id="lightbox" class="lightbox">
-  <div class="ar">
-  <span class="close-btn" onclick="closeLightbox()">&times;</span>
-  <div class="lightbox-content">
+  <div class="lightbox-part">
+    <span class="close-btn" id="closeLightboxBtn">&times;</span>
+    <div class="lightbox-content">
     <div class="media-wrapper">
     <!-- Ici seront affichées les images ou vidéos -->
     </div>
+    <span id="media-title" tabindex="0"></span>
   </div>
   
-  <div class="butt">
+  <div class="buttonsLightbox">
   <!-- Ajout des boutons pour média précédent et suivant -->
-  <button id="prevMediaButton" class="prev-media-button">
-    <i class="fa-solid fa-angle-left"></i>
+  <button id="prevMediaButton" class="prev-media-button" tabindex="0">
+    <em class="fa-solid fa-angle-left"></em>
   </button>
-  <button id="nextMediaButton" class="next-media-button">
-    <i class="fa-solid fa-angle-right"></i>
+  <button id="nextMediaButton" class="next-media-button" tabindex="0">
+    <em class="fa-solid fa-angle-right"></em>
   </button>
   </div>
-  <p id="mediaTitle"></p>
+  <p id="mediaTitle" tabindex="0"></p>
   </div>
 </div>
 <!-- Scripts pour manipuler la page -->
@@ -130,6 +136,7 @@
 <script src="/scripts/utils/lightbox.js"></script>
 <script src="/scripts/utils/filter.js"></script>
 <script src="/scripts/utils/contactForm.js"></script>
+<script src="/scripts/utils/logolien.js"></script>
 <script src="/scripts/templates/photographer.js"></script>
 </body>
 </html>
