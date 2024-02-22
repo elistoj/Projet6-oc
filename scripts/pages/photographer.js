@@ -51,7 +51,7 @@ class Video extends Media {
     const videoPath = `assets/images/${this.photographerName}/${this.mediaData.video}`;
     video.src = videoPath;
     video.controls = false;
-    video.autoplay = true; // Dodavanje atributa za automatsko reprodukovanje
+    video.autoplay = false; // Dodavanje atributa za automatsko reprodukovanje
     video.alt = this.mediaData.title; // Définition de l'attribut alt avec le titre de le video
     return video;
   }
@@ -75,11 +75,7 @@ async function fetchPhotographerData(id) {
     // Rechercher le photographe en fonction de son ID
     const photographer = data.photographers.find(p => p.id == id);
 
-    // Gérer le cas où le photographe n'est pas trouvé
-    if (!photographer) {
-      console.error('Photographe non trouvé pour ID :', id);
-      throw new Error('Données du photographe non trouvées.');
-    }
+ 
 
     // Filtrer les médias en fonction de l'ID du photographe
     photographerMedia = data.media.filter(m => m.photographerId == id);
@@ -100,21 +96,6 @@ function createMediaCard(media, photographerName, mediaIndex, photographer, medi
   const mediaInstance = MediaFactory.createMedia(media, photographerName);
   const mediaElement = mediaInstance.render();
 
-// Ajoutez tabIndex uniquement si l'élément multimédia est une vidéo ou une image
-  if (mediaElement.tagName.toLowerCase() === 'video' || mediaElement.tagName.toLowerCase() === 'img') {
-    mediaElement.tabIndex = 0;
-  }
-
-// Ajoutez un écouteur d'événement pour ouvrir la lightbox en cliquant ou sur Entrée
-  mediaElement.addEventListener('click', () => openLightbox(media, mediaList, photographerName));
-  mediaElement.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      openLightbox(media, mediaList, photographerName);
-    }
-    if (event.key === 'Enter') {
-      handleLikeClick(mediaIndex, heartIcon, photographer, mediaList);
-    }
-  });
 
 // Ajoute l'élément multimédia à l'onglet
   card.appendChild(mediaElement);
@@ -141,16 +122,35 @@ function createMediaCard(media, photographerName, mediaIndex, photographer, medi
   likes.textContent = ` ${media.likes}`;
   likesContainer.appendChild(likes);
   likesContainer.appendChild(heartIcon);
+  likes.tabIndex = 0; 
 
   const mediaInfo = document.createElement('div');
   mediaInfo.classList.add('media-info');
   const title = document.createElement('p');
   title.textContent = media.title;
+  title.tabIndex = 0; 
+
 
   mediaInfo.appendChild(title);
   mediaInfo.appendChild(likesContainer);
 
   card.appendChild(mediaInfo);
+
+// Ajoutez tabIndex uniquement si l'élément multimédia est une vidéo ou une image
+if (mediaElement.tagName.toLowerCase() === 'video' || mediaElement.tagName.toLowerCase() === 'img') {
+  mediaElement.tabIndex = 0;
+}
+
+// Ajoutez un écouteur d'événement pour ouvrir la lightbox en cliquant ou sur Entrée
+mediaElement.addEventListener('click', () => openLightbox(media, mediaList, photographerName));
+mediaElement.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    openLightbox(media, mediaList, photographerName);
+  }
+  if (event.key === 'Enter') {
+    handleLikeClick(mediaIndex, heartIcon, photographer, mediaList);
+  }
+});
 
   return card;
 }
@@ -169,30 +169,39 @@ async function populatePhotographerInfo(id) {
       throw new Error('Données du photographe non trouvées.');
     }
 
-    // Affichage des informations sur le photographe
-    document.getElementById('photographerName').textContent = photographer.name;
+     // Affichage des informations sur le photographe
+     document.getElementById('photographerName').textContent = photographer.name;
+     photographer.tabIndex = 0; 
 
-    // Ajout de la ville et du pays
-    const cityCountry = document.createElement('p');
-    cityCountry.textContent = `${photographer.city}, ${photographer.country}`;
-    cityCountry.classList.add('city-country');
-    document.getElementById('photographerInfoContainer').appendChild(cityCountry);
 
-    // Ajout du slogan
-    const tagline = document.createElement('p');
-    tagline.textContent = photographer.tagline;
-    document.getElementById('photographerInfoContainer').appendChild(tagline);
+     // Ajout de la ville et du pays
+     const cityCountry = document.createElement('p');
+     cityCountry.textContent = `${photographer.city}, ${photographer.country}`;
+     cityCountry.classList.add('city-country');
+     document.getElementById('photographerInfoContainer').appendChild(cityCountry);
+     cityCountry.tabIndex = 0;
 
-    // Ajout de la photo du photographe
-    const img = document.createElement('img');
-    img.src = `assets/photographers/${photographer.portrait}`;
-    img.alt = photographer.name;
-    document.getElementById('photographerImageContainer').appendChild(img);
+     // Ajout du slogan
+     const tagline = document.createElement('p');
+     tagline.textContent = photographer.tagline;
+     document.getElementById('photographerInfoContainer').appendChild(tagline);
+     tagline.tabIndex = 0;
+
+     // Ajout de la photo du photographe
+     const img = document.createElement('img');
+     img.src = `assets/photographers/${photographer.portrait}`;
+     img.alt = photographer.name;
+     document.getElementById('photographerImageContainer').appendChild(img);
+
+    // Prikazivanje ukupnog broja lajkova i cijene fotografa
+    const totalLikes = calculateTotalLikes(photographerMedia);
+    displayTotalLikesAndPrice(totalLikes, photographer.price);
 
   } catch (error) {
     console.error('Erreur lors du remplissage des informations sur le photographe :', error);
   }
 }
+
 
 // Fonction asynchrone pour remplir les photos du photographe
 async function populatePhotographerPhotos(id, sortBy) {
@@ -234,8 +243,7 @@ async function populatePhotographerPhotos(id, sortBy) {
     // Ajout du nombre total de likes
     const totalLikes = calculateTotalLikes(sortedMedia);
 
-    // Affichage du nombre total de likes avec l'icône de cœur et le prix du photographe
-    displayTotalLikesAndPrice(totalLikes, photographer.price);
+  
   } catch (error) {
     console.error('Erreur lors du remplissage des photos du photographe :', error);
   }
@@ -343,5 +351,7 @@ if (!photographerId) {
   // Ensuite, appelons une nouvelle fonction qui définit les boutons de tri
   initializeSortButtons(photographerId);
 }
+
+
 
 
