@@ -101,7 +101,7 @@ function createMediaCard(media, photographerName, mediaIndex, photographer, medi
   card.appendChild(mediaElement);
 
 // Création de l'icône du cœur comme fa-regular et ajout de tabIndex
-  const heartIcon = document.createElement('i');
+  const heartIcon = document.createElement('em');
   heartIcon.classList.add('fa-regular', 'fa-heart');
   heartIcon.tabIndex = 0;
 
@@ -332,7 +332,7 @@ function calculateTotalLikes(photographerMedia) {
 function displayTotalLikesAndPrice(totalLikes, pricePerDay) {
   const likesTotalPriceContainer = document.getElementById('likesTotalPrice');
   // Affichage du nombre total de likes avec l'icône de cœur et le prix du photographe
-  likesTotalPriceContainer.innerHTML = `<p>${totalLikes} <i class="fa-solid fa-heart"></i> ${pricePerDay} € / jour</p>`;
+  likesTotalPriceContainer.innerHTML = `<p>${totalLikes} <em class="fa-solid fa-heart"></em> ${pricePerDay} € / jour</p>`;
 }
 
 /// Récupération de l'ID du photographe à partir des paramètres d'URL
