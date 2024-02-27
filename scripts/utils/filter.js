@@ -1,6 +1,5 @@
 // Fonction pour ouvrir/fermer le menu de filtre
 function openCloseFilterMenu() {
-    console.log('La fonction openCloseFilterMenu est appelée.');
   
     const filterMenu = document.querySelector(".dropdown_content");
     const filterMenuButton = document.querySelector(".btn_drop");
