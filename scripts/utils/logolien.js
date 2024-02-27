@@ -40,9 +40,5 @@ function redirectToHomepage() {
     });
   });
   
-  // Journalisation pour vérifier si le logo est trouvé dans le DOM
-  document.addEventListener('DOMContentLoaded', function() {
-    const logo = document.querySelector('.logo');
-    console.log(logo);
-  });
+
   
