@@ -10,7 +10,6 @@ async function getPhotographers() {
     // Analyse de la réponse JSON
     const data = await response.json();
 
-    console.log('Données récupérées :', data); // Journalisation des données récupérées
 
     // Renvoie directement le tableau des photographes
     return data.photographers;
