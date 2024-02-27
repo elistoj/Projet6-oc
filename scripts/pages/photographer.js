@@ -1,8 +1,7 @@
 // Déclaration de la variable pour stocker les médias du photographe
 let photographerMedia;
 
-// Déclaration de la variable pour le photographer
-let photographer;
+
 
 // Déclaration de la variable pour stocker l'ID du photographe
 let photographerId;
@@ -271,7 +270,6 @@ async function initializeSortButtons(id) {
 
 // Fonction pour gérer le clic sur l'icône de cœur
 function handleLikeClick(mediaIndex, heartIcon, photographer, mediaList) {
-  console.log('Cœur cliqué !');
   const media = mediaList[mediaIndex];
   if (!media || typeof media !== 'object' || !media.likes) {
     console.error('Objet média non valide :', media);
@@ -351,7 +349,5 @@ if (!photographerId) {
   // Ensuite, appelons une nouvelle fonction qui définit les boutons de tri
   initializeSortButtons(photographerId);
 }
-
-
 
 
