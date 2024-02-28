@@ -1,8 +1,6 @@
 // Déclaration de la variable pour stocker les médias du photographe
 let photographerMedia;
 
-
-
 // Déclaration de la variable pour stocker l'ID du photographe
 let photographerId;
 
@@ -20,6 +18,7 @@ class MediaFactory {
 }
 
 // Classe de base pour les médias
+
 class Media {
   constructor(mediaData, photographerName) {
     this.mediaData = mediaData;
@@ -108,11 +107,16 @@ function createMediaCard(media, photographerName, mediaIndex, photographer, medi
   heartIcon.addEventListener('click', () => handleLikeClick(mediaIndex, heartIcon, photographer, mediaList));
 
 // Ajout d'un écouteur d'événement pour Enter sur le coeur pour gérer les likes
-  heartIcon.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      handleLikeClick(mediaIndex, heartIcon, photographer, mediaList);
-    }
-  });
+heartIcon.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault(); // Спречи стандардното однесување на Enter копчето
+    console.log('Enter pressed');
+    handleLikeClick(mediaIndex, heartIcon, photographer, mediaList);
+  }
+});
+
+
+
 
 // Ajoute l'icône du cœur à la carte
   const likesContainer = document.createElement('div');
@@ -192,7 +196,7 @@ async function populatePhotographerInfo(id) {
      img.alt = photographer.name;
      document.getElementById('photographerImageContainer').appendChild(img);
 
-    // Prikazivanje ukupnog broja lajkova i cijene fotografa
+    //Total likes
     const totalLikes = calculateTotalLikes(photographerMedia);
     displayTotalLikesAndPrice(totalLikes, photographer.price);
 
@@ -263,6 +267,7 @@ async function initializeSortButtons(id) {
     sortByTitleButton.addEventListener('click', () => populatePhotographerPhotos(id, 'title'));
     sortByLikesButton.addEventListener('click', () => populatePhotographerPhotos(id, 'likes'));
 
+   
   } catch (error) {
     console.error('Erreur lors du remplissage des photos du photographe :', error);
   }
@@ -349,5 +354,7 @@ if (!photographerId) {
   // Ensuite, appelons une nouvelle fonction qui définit les boutons de tri
   initializeSortButtons(photographerId);
 }
+
+
 
 
