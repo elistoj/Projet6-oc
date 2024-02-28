@@ -51,9 +51,7 @@ function openLightbox(media, mediaList, photographerName) {
   prevMediaButton.addEventListener('click', () => showPreviousMedia(mediaList, photographerName));
   nextMediaButton.addEventListener('click', () => showNextMedia(mediaList, photographerName));
 
-  // Définir tabindex pour les boutons multimédias précédents et suivants
-  prevMediaButton.setAttribute('tabindex', '0');
-  nextMediaButton.setAttribute('tabindex', '0');
+
 }
 
 // Fonction pour fermer la lightbox
