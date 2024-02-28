@@ -66,3 +66,4 @@ const displayMediaWithFilter = mediasTemplate => {
 // Appel des fonctions
 openCloseFilterMenu();
 displayMediaWithFilter();
+
