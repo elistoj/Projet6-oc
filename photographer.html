@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-  
 <head>
   <!-- Liaison avec le fichier de style CSS -->
   <link href="css/style.css" rel="stylesheet">
@@ -11,13 +10,13 @@
   <!-- Configuration de l'icône du site -->
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <!-- Liaison avec la police de caractères provenant de Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=DM+Sans&amp;display=swap" rel="stylesheet">
   <title>Fisheye - photographe </title>
 </head>
 <body>
 <!-- En-tête avec le logo -->
-<header >
-  <img src="assets/images/logo.png" class="logo" id="logo" alt="logo de Fisheye" tabIndex="0"> <!-- tabindex="0" pour accéder au lecteur d'écran -->
+<header>
+  <img src="assets/images/logo.png" class="logo" id="logo" alt="logo de Fisheye" tabindex="0"> <!-- tabindex="0" pour accéder au lecteur d'écran -->
 </header>
 <main id="main">
   <!-- Section avec les informations sur le photographe -->
@@ -37,20 +36,20 @@
       <h2 tabIndex="0">Trier par</h2>
       <div class="filter_section">
           <div class="dropdown">
-              <button class="btn_drop" type="button" role="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="filterOptions" aria-label="Sort by" tabIndex="0"> <!-- tabindex="0" for screen reader accessibility -->
-                  <span id="current_filter">Titre</span>
+              <button class="btn_drop" type="button" role="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="filterOptions" aria-label="Trier par" > 
+                  <span id="current_filter" tabindex="0">Date</span>
                   <span class="fa-solid fa-chevron-up" aria-hidden="true"></span>
               </button>
 
               <ul id="filterOptions" class="dropdown_content" aria-hidden="true" role="listbox">
                   <li>
-                      <button id="sortByTitleButton" type="button" tabindex="-1" aria-label="Sort by title" tabIndex="0">Titre</button> <!-- tabindex="0" for screen reader accessibility -->
+                    <button id="sortByTitleButton" type="button" tabindex="-1" aria-label="Titre" >Titre</button>
                   </li>
                   <li>
-                      <button id="sortByLikesButton" type="button" tabindex="-1" aria-label="Sort by popularity" tabIndex="0">Popularité</button> <!-- tabindex="0" for screen reader accessibility -->
+                    <button id="sortByLikesButton" type="button" tabindex="-1" aria-label="Popularité" >Popularité</button>
                   </li>
                   <li>
-                      <button id="sortByDateButton" type="button" tabindex="-1" aria-label="Sort by date" tabIndex="0">Date</button> <!-- tabindex="0" for screen reader accessibility -->
+                    <button id="sortByDateButton" type="button" tabindex="-1" aria-label="Date" >Date</button>
                   </li>
               </ul>
           </div>
@@ -78,7 +77,7 @@
   <header>
     <h2>Contactez-moi</h2>
     <!-- Bouton pour fermer la modal -->
-    <button id="closeModalIcon" aria-label="Fermer la modal" tabIndex="0"> <!-- tabindex="0" for screen reader accessibility -->
+    <button id="closeModalIcon" aria-label="Fermer la modal" tabIndex="0"> 
       <img src="assets/icons/close.svg" alt="closeIcon" />
     </button>
   </header>
@@ -87,22 +86,22 @@
   <form>
     <div class="formData">
       <label for="first">Prénom</label><br>
-      <input class="text-control" id="first" name="first" type="text" tabIndex="0"><br> <!-- tabindex="0" for screen reader accessibility -->
+      <input class="text-control" id="first" name="first" type="text" tabIndex="0"><br> <!-- tabindex="0" pour l'accessibilité des lecteurs d'écran -->
     </div>
     <div class="formData">
       <label for="last">Nom</label><br>
-      <input class="text-control" id="last" name="last" type="text" tabIndex="0"><br> <!-- tabindex="0" for screen reader accessibility -->
+      <input class="text-control" id="last" name="last" type="text" tabIndex="0"><br> <!-- tabindex="0" pour l'accessibilité des lecteurs d'écran -->
     </div>
     <div class="formData">
       <label for="email">E-mail</label><br>
-      <input class="text-control" id="email" name="email" type="email" tabIndex="0"><br> <!-- tabindex="0" for screen reader accessibility -->
+      <input class="text-control" id="email" name="email" type="email" tabIndex="0"><br> <!-- tabindex="0" pour l'accessibilité des lecteurs d'écran -->
     </div>
     <div class="formData">
       <label for="message">Votre message</label><br>
-      <input class="text-control" id="message" name="message" type="text" tabIndex="0"><br> <!-- tabindex="0" for screen reader accessibility -->
+      <input class="text-control" id="message" name="message" type="text" tabIndex="0"><br> <!-- tabindex="0" pour l'accessibilité des lecteurs d'écran -->
     </div>
     <!-- Bouton pour envoyer le message -->
-    <button class="contact_button" tabIndex="0">Envoyer</button> <!-- tabindex="0" for screen reader accessibility -->
+    <button class="contact_button" tabIndex="0">Envoyer</button> <!-- tabindex="0" pour l'accessibilité des lecteurs d'écran -->
   </form>
 </div>
 </div>
@@ -112,7 +111,8 @@
 
 <div id="lightbox" class="lightbox">
   <div class="lightbox-part">
-    <span class="close-btn" id="closeLightboxBtn">&times;</span>
+<!-- Button pour ferme le lightbox -->
+<span class="close-btn" id="closeLightboxBtn" aria-label="Fermer le lightbox" tabindex="0" role="button">&times;</span>
     <div class="lightbox-content">
     <div class="media-wrapper">
     <!-- Ici seront affichées les images ou vidéos -->
@@ -122,10 +122,10 @@
   
   <div class="buttonsLightbox">
   <!-- Ajout des boutons pour média précédent et suivant -->
-  <button id="prevMediaButton" class="prev-media-button" tabindex="0">
+  <button id="prevMediaButton" class="prev-media-button" aria-label="Media précédent" tabindex="0">
     <em class="fa-solid fa-angle-left"></em>
   </button>
-  <button id="nextMediaButton" class="next-media-button" tabindex="0">
+  <button id="nextMediaButton" class="next-media-button" aria-label="Media suivant" tabindex="0">
     <em class="fa-solid fa-angle-right"></em>
   </button>
   </div>
