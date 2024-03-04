@@ -67,3 +67,5 @@ const displayMediaWithFilter = mediasTemplate => {
 openCloseFilterMenu();
 displayMediaWithFilter();
 
+//mediasTemplate est defini est utilise dans ce document
+// 'populatePhotographerPhotos' est defini dans photographer.js
