@@ -358,3 +358,10 @@ if (!photographerId) {
 
 
 
+
+
+//openLightbox est non défini dans ce document, mais utilisé. Il est défini dans le lightbox.js
+
+// totalLikes  est utilisé dans le document pour sorted likes
+
+// 'photographerMedia' reçoit une valeur mais n'est jamais utilisé dans ce document. Il est utilisé dans le photographer.html
