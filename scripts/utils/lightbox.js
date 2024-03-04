@@ -1,5 +1,7 @@
 // Déclaration de l'index du média actuellement affiché dans la lightbox
 let currentMediaIndex = 0;
+const lightbox = document.getElementById('lightbox');
+
 
 // Fonction pour ouvrir la lightbox
 function openLightbox(media, mediaList, photographerName) {
@@ -108,3 +110,8 @@ function displayMedia(mediaList, index, photographerName) {
     mediaElement.tabIndex = 0;
   }
 }
+
+//MediaFactory est non défini dans ce document, mais utilisé. Il est défini dans le photographer.js
+
+
+// 'openLightbox' reçoit une valeur mais n'est jamais utilisé dans ce document. Il est utilisé dans le photographer.js
