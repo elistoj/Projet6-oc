@@ -101,3 +101,8 @@ async function init() {
 
 init();
 
+
+
+// photographerTemplate  est utilisé dans le document ,mais est  defini dans templates/photographerTemplate
+// index  est utilisé dans le document  
+
