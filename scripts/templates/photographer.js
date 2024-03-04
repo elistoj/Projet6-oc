@@ -41,3 +41,5 @@ function photographerTemplate(data) {
     // Retourne un objet avec les données du photographe et la fonction pour obtenir le DOM de la carte utilisateur
     return { id, name, picture, getUserCardDOM };
 }
+
+//photographerTemplate est  défini dans ce document, mais non utilisé. Il est utilisé dans le index.js
