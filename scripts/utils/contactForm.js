@@ -113,3 +113,6 @@ document.addEventListener('keydown', function(event) {
         closeModal();
     }
 });
+
+// const lastName, firstName, email, modal est openModalWindow sont utilisé dans le document 
+
